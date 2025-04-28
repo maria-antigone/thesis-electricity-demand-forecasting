@@ -175,4 +175,3 @@ cython_debug/
 
 # Data
 /data/raw/
-/data/processed/
