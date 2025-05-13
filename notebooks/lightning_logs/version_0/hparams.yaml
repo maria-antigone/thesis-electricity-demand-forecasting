@@ -1,0 +1,108 @@
+attention_head_size: 1
+categorical_groups: {}
+causal_attention: true
+dropout: 0.1
+embedding_labels:
+  group_id:
+    DE: 0
+embedding_paddings: []
+embedding_sizes:
+  group_id: !!python/tuple
+  - 1
+  - 1
+hidden_continuous_size: 8
+hidden_continuous_sizes: {}
+hidden_size: 16
+learning_rate: 0.03
+log_gradient_flow: false
+log_interval: 10
+log_val_interval: null
+lstm_layers: 1
+max_encoder_length: 96
+monotone_constaints: {}
+optimizer: ranger
+optimizer_params: null
+output_size: 1
+output_transformer: !!python/object:pytorch_forecasting.data.encoders.EncoderNormalizer
+  center: true
+  center_: !!python/object/apply:numpy.core.multiarray.scalar
+  - &id001 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    dxRnyhVa60A=
+  max_length: null
+  method: standard
+  method_kwargs: {}
+  scale_: !!python/object/apply:numpy.core.multiarray.scalar
+  - *id001
+  - !!binary |
+    EZbMfqRdw0A=
+  transformation: relu
+reduce_on_plateau_min_lr: 1.0e-05
+reduce_on_plateau_patience: 4
+reduce_on_plateau_reduction: 2.0
+share_single_variable_networks: false
+static_categoricals:
+- group_id
+static_reals:
+- encoder_length
+- target_center
+- target_scale
+time_varying_categoricals_decoder: []
+time_varying_categoricals_encoder: []
+time_varying_reals_decoder:
+- time_idx
+- month
+- hour
+- is_daylight
+- relative_time_idx
+time_varying_reals_encoder:
+- time_idx
+- month
+- hour
+- is_daylight
+- relative_time_idx
+- target
+- DE_solar_capacity
+- DE_solar_generation_actual
+- DE_wind_capacity
+- DE_wind_generation_actual
+- DE_wind_offshore_capacity
+- DE_wind_offshore_generation_actual
+- DE_wind_onshore_capacity
+- DE_wind_onshore_generation_actual
+- DE_temperature
+weight_decay: 0.0
+x_categoricals:
+- group_id
+x_reals:
+- encoder_length
+- target_center
+- target_scale
+- time_idx
+- month
+- hour
+- is_daylight
+- relative_time_idx
+- target
+- DE_solar_capacity
+- DE_solar_generation_actual
+- DE_wind_capacity
+- DE_wind_generation_actual
+- DE_wind_offshore_capacity
+- DE_wind_offshore_generation_actual
+- DE_wind_onshore_capacity
+- DE_wind_onshore_generation_actual
+- DE_temperature
