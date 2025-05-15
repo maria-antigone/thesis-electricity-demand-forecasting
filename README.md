@@ -1,77 +1,120 @@
 # thesis-electricity-demand-forecasting
 
-# ⚡️ Predicting Electricity Demand With Deep Learning
+# Predicting Long-Term Electricity Demand with Deep Learning Techniques
 
-This project forecasts long-term electricity demand in Germany using Temporal Fusion Transformers (TFTs). It compares the deep learning approach against a traditional statistical model (SARIMA) and explores the impact of renewable energy availability as an exogenous feature.
+**Author:** Maria-Antigone Rumpf  
+**Institution:** Tilburg University – MSc Data Science & Society  
+**Supervisor:** Dr. Giuseppe Cascavilla  
+**Timeline:** January – June 2025
 
-## 📌 Project Goals
+## Project Overview
 
-- Predict electricity demand 30 days ahead (long-term) using TFT
-- Compare performance against SARIMA as a statistical baseline
-- Analyze feature importance using SHAP for interpretability
-- Understand how renewable energy availability affects demand
+This project explores how deep learning can improve long-term electricity demand forecasting at the national grid level in Germany. The focus is on **comparing the Temporal Fusion Transformer (TFT)** with **Long Short-Term Memory (LSTM)** networks across three time horizons, with a particular emphasis on **30-day-ahead forecasting** — a timeframe underexplored in energy research.
 
-## 📁 Repository Structure
+The study introduces **renewable energy availability (wind & solar)** as novel exogenous predictors and evaluates model interpretability using **SHAP values**, to better inform energy planning and policy.
+
+## Research Goals
+
+- **RQ1:** RQ 1: To what extent is the **Temporal Fusion Transformer (TFT)** model able to **outperform LSTM** for _30-day electricity demand forecasting_?
+- **SRQ 1.1:** How do **short-term** (day-ahead), **medium-term** (7 days ahead) and **long-term** (30 days ahead) time horizons compare in TFT’s ability to accurately forecast electricity demand?
+- **RQ2:** How do the **predictor features** contribute to most accurate long-term electricity demand forecasting, by **comparing SHAP values between TFT and LSTM?**
+- **SRQ 2.1:** To what extent do **different time horizons** change what features most accurately predict electricity demand?
+
+## Dataset
+
+- **Source:** ENTSO-E Transparency Platform  
+- **Frequency:** 15-minute intervals  
+- **Timeframe:** 2015–2020  
+- **Rows:** ~200,000  
+- **Features:** Electricity load, time-aware calendar features, weather-based features, wind and solar generation
+
+## Methodology (_see full workflow under /reports_)
+
+1. **Data Preparation**
+   - Merge raw sources, forward filling weather data
+   - Clean data, handle missing values
+   - Feature engineering (e.g., cyclic encodings, lag creation)
+
+2. **Exploratory Data Analysis**
+   - Demand trends and seasonality
+   - Correlation analysis by time horizon
+   - Distribution inspection
+
+3. **Modeling**
+   - **LSTM**: Classical deep learning model for time-series
+   - **TFT**: State-of-the-art model for interpretable, multi-horizon forecasting
+
+4. **Preprocessing**
+   - Normalize numeric features
+   - Encode cyclical time features
+   - Subsample for fast prototyping
+
+5. **Training**
+   - Use of GPU servers for high-power computing (HPC), via Linux
+   - Hyperparameter tuning (random search)
+   - Evaluation on short, medium, and long horizons
+
+6. **Evaluation**
+   - Metrics: **MAE** and **MAPE**
+   - Interpretability: **SHAP values** for feature importance comparison
+
+## Experimental Design
+
+- Forecasting horizons:
+  - **Short-term:** 1 day ahead
+  - **Medium-term:** 7 days ahead
+  - **Long-term:** 30 days ahead (main focus)
+- Models:
+  - TFT (multi-horizon)
+  - LSTM (retrained for each horizon separately)
+- Evaluation:
+  - Forecast accuracy (RQ1)
+  - Feature importance analysis via SHAP (RQ2)
+
+## Repository Structure
 
 ```
 thesis-electricity-demand-forecasting/
 │
-├── data/                  # Raw and processed datasets (some ignored by Git)
-│   ├── raw/               # Original datasets (ignored)
-│   └── processed/         # Cleaned datasets (optional)
+├── data/                     # Raw and processed datasets
+│   ├── raw/                  # Original datasets
+│   └── processed/            # Cleaned datasets
 │
-├── notebooks/             # Jupyter notebooks for EDA and modeling
-│   └── cleaning_update.ipynb
+├── notebooks/                # Jupyter notebooks for EDA, cleaning, model prototyping, preprocessing
 │
-├── scripts/               # Python scripts for preprocessing or modeling
-├── models/                # Saved model files (ignored)
-├── reports/               # Visualizations and output summaries
-├── src/                   # Source code for reproducibility
+├── reports/                  # Additional resources
+├── src/                      # Python scripts
+│   ├── main.py               # Main training script, for GPU deployment
+│   └── data_processing.py    # Data fetching and preparation
+│   └── utils.py              # Helper functions
 │
-├── .gitignore             # Specifies files not tracked by Git
-├── README.md              # This file
+├── .gitignore             
+├── README.md
+└── requirements.txt              
 ```
 
-## 🧪 How to Run
+## Clone the repository
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
 
-1. Clone this repository:
+## Set up a Python environment
+conda create -n demand_forecasting python=3.10
+conda activate demand_forecasting
 
-git clone https://github.com/maria-antigone/thesis-electricity-demand-forecasting.git cd thesis-electricity-demand-forecasting
-
-2. (Optional) Create and activate a virtual environment
-
-3. Install dependencies:
-
+## Install dependencies
 pip install -r requirements.txt
 
-4. Run the notebook:
+## Run the model training
+python -m src.main
 
-jupyter notebook notebooks/cleaning_update.ipynb
+## 🧠 Key Libraries
 
-## 📊 Datasets
-
-- Electricity demand: [ENTSO-E Transparency Platform](https://transparency.entsoe.eu/)
-- Weather data: Open-source datasets for Germany
-
-## 🧹 Data Cleaning Workflow
-
-The full cleaning and merging process is documented in the `notebooks/cleaning_update.ipynb` notebook.
-
-A step-by-step written summary is also available [here](docs/cleaning_workflow.md). *(Coming soon)*
-
-## 📚 Citation
-
-Based on a Master's thesis project in Data Science & Society at Tilburg University (2025).  
-Author: Maria-Antigone Rumpf
-
-## 🤝 Contributions
-
-This is a solo thesis project, but suggestions are welcome via GitHub issues or pull requests.
-
-## 📜 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## 📬 Contact
-
-For questions or collaboration, please reach out via GitHub or email:
+- `pytorch-lightning`
+- `pytorch-forecasting`
+- `tensorflow` / `keras`
+- `scikit-learn`
+- `pandas`
+- `numpy`
+- `matplotlib`
+- `seaborn`
+- `shap`
