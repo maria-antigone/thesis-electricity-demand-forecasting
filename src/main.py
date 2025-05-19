@@ -7,8 +7,8 @@ from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_forecasting.models import TemporalFusionTransformer
 from pytorch_forecasting.metrics import MAE
 
-from src.data_processing import load_featurized_data
-from src.utils import create_tft_dataset
+from src.data_processing_tft import load_featurized_data
+from src.utils_tft import create_tft_dataset
 
 import warnings
 from sklearn.exceptions import NotFittedError

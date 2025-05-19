@@ -1,0 +1,32 @@
+short:
+  input_window: 672              # 7 days
+  output_horizon: 96             # 1 day
+  lags: [1, 2, 96, 192, 288, 672]
+  scaler: "MinMax"
+  target_column: "actual_load" 
+  early_stopping_patience: 5
+  epochs: 50
+  batch_size: 64
+  learning_rate: 0.001
+
+medium:
+  input_window: 2016             # 21 days
+  output_horizon: 672            # 7 days
+  lags: [1, 96, 672, 1344, 2016]
+  scaler: "MinMax"
+  target_column: "actual_load" 
+  early_stopping_patience: 5
+  epochs: 50
+  batch_size: 64
+  learning_rate: 0.001
+
+long:
+  input_window: 4032             # 56 days
+  output_horizon: 2880           # 30 days
+  lags: [1, 96, 672, 1440, 2880]
+  scaler: "MinMax"
+  target_column: "actual_load" 
+  early_stopping_patience: 5
+  epochs: 50
+  batch_size: 64
+  learning_rate: 0.001
