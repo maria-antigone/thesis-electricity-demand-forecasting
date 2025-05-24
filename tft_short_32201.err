@@ -1,0 +1,52 @@
+[rank: 0] Global seed set to 42
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/main_tft_short.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: False
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/setup.py:176: PossibleUserWarning: GPU available but not used. Set `accelerator` and `devices` using `Trainer(accelerator='gpu', devices=1)`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:613: UserWarning: Checkpoint directory checkpoints/tft_short exists and is not empty.
+  rank_zero_warn(f"Checkpoint directory {dirpath} exists and is not empty.")
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 1.7 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 13.1 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 12.4 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 1.1 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 1.1 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 1.1 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 1.1 K 
+11 | lstm_encoder                       | LSTM                            | 2.2 K 
+12 | lstm_decoder                       | LSTM                            | 2.2 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 544   
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 32    
+15 | static_enrichment                  | GatedResidualNetwork            | 1.4 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 1.1 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 576   
+18 | pos_wise_ff                        | GatedResidualNetwork            | 1.1 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 576   
+20 | output_layer                       | Linear                          | 17    
+----------------------------------------------------------------------------------------
+41.0 K    Trainable params
+0         Non-trainable params
+41.0 K    Total params
+0.164     Total estimated model params size (MB)
+2025-05-23 13:35:29.488045: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-05-23 13:35:31.040053: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-05-23 13:35:36.112054: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(

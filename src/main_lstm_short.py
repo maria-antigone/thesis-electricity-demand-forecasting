@@ -5,6 +5,10 @@ from tensorflow.keras.callbacks import EarlyStopping
 from utils_lstm import load_config, build_lstm_model, log_epoch_metrics
 from data_processing_lstm import prepare_lstm_data
 
+# sanity check
+import tensorflow as tf
+print("GPU available:", tf.config.list_physical_devices('GPU'), flush=True)
+
 # 1. Load config
 config = load_config("short")
 forecast_horizon = config["output_horizon"]
@@ -23,6 +27,9 @@ model = build_lstm_model(input_shape, forecast_horizon, config)
 
 # 4. Callbacks
 early_stop = EarlyStopping(monitor='val_loss', patience=config["early_stopping_patience"], restore_best_weights=True)
+
+# check...
+print(f"Input shape: {X_train.shape}, Output shape: {y_train.shape}", flush=True)
 
 # 5. Training loop with GPU-friendly logging
 for epoch in range(config["epochs"]):
