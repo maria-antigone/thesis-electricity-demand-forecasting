@@ -6,8 +6,8 @@ import os
 import yaml
 
 def load_config(horizon="short"):
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    config_path = os.path.join(base_dir, "config.yaml")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(script_dir, "config.yaml")
     with open(config_path, "r") as f:
         return yaml.safe_load(f)[horizon]
 
@@ -19,13 +19,15 @@ def log_epoch_metrics(epoch, logs):
 
 def build_lstm_model(input_shape, forecast_horizon, config):
     model = Sequential()
-    model.add(LSTM(64, return_sequences=False, input_shape=input_shape))
-    model.add(Dropout(0.2))
+    model.add(LSTM(config.get("lstm_units", 64), 
+                   return_sequences=False, 
+                   input_shape=input_shape))
+    model.add(Dropout(config.get("dropout_rate", 0.2)))
     model.add(Dense(forecast_horizon))
 
     model.compile(
         optimizer=Adam(learning_rate=config.get("learning_rate", 0.001)),
-        loss="mse",
+        loss=config.get("loss_function", "mae"),
         metrics=["mae"]
     )
     return model

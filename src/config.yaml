@@ -1,13 +1,31 @@
+# In your src/config.yaml
+
 short:
-  input_window: 672              # 7 days
-  output_horizon: 96             # 1 day
-  lags: [1, 2, 96, 192, 288, 672]
-  scaler: "MinMax"
-  target_column: "actual_load" 
-  early_stopping_patience: 5
-  epochs: 50
-  batch_size: 64
-  learning_rate: 0.001
+  # Common or TFT specific (ensure these are distinct if needed or name uniquely)
+  input_window: 672          # Used by LSTM & TFT
+  output_horizon: 96         # Used by LSTM & TFT
+  target_column: "actual_load" # Used by LSTM & TFT
+  early_stopping_patience: 5 # Used by LSTM & TFT
+  epochs: 50                 # Used by LSTM & TFT
+  batch_size: 64             # Used by LSTM & TFT
+  learning_rate: 0.001       # Used by LSTM & TFT (can be different)
+
+  # ... (TFT specific params like hidden_size, attention_head_size etc.) ...
+  # num_workers: 0 # (For TFT, if you were adding it)
+  # gradient_clip_val: 0.1
+  # log_every_n_steps: 10
+  # run_tag: "short_v1.1"
+  train_split: 0.8      # Used by both data_processing if they use this key
+  val_split: 0.1        # Used by both data_processing if they use this key
+
+
+  # LSTM specific parameters
+  lags: [1, 2, 96, 192, 288, 672] # For LSTM data_processing
+  feature_scaler: "MinMax"       # For LSTM X features (lags)
+  target_scaler: "MinMax"        # For LSTM Y target (actual_load)
+  lstm_units: 64                 # For LSTM model
+  dropout_rate: 0.2              # For LSTM model
+  loss_function: "mae"           # For LSTM model (CRITICAL for scaled targets)
 
 medium:
   input_window: 2016             # 21 days
