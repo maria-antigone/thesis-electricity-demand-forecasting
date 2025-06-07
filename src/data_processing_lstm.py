@@ -22,7 +22,21 @@ def prepare_lstm_data(df_original: pd.DataFrame, config: dict):
         df[f"lag_{lag_val}"] = df[target_col].shift(lag_val)
         features_for_x.append(f"lag_{lag_val}")
 
-    df = df.dropna(subset=features_for_x + [target_col]) 
+    exogenous_feature_names = config.get("exogenous_features", [])
+
+    if exogenous_feature_names:
+        print(f"Attempting to add exogenous features: {exogenous_feature_names}", flush=True)
+        for ex_feat in exogenous_feature_names:
+            if ex_feat in df.columns:
+                if ex_feat not in features_for_x:
+                    features_for_x.append(ex_feat)
+            else:
+                print(f"Warning: Exogenous feature '{ex_feat}' not found in DataFrame columns. Skipping.", flush=True)
+    else:
+        print("No exogenous features provided in config. Only lags will be used for LSTM input.", flush=True)
+
+    columns_to_check_for_nan = list(set(features_for_x + [target_col]))
+    df = df.dropna(subset=columns_to_check_for_nan)
 
     # Step 2: Train/val/test split (time-based)
     total_len = len(df)
@@ -40,7 +54,7 @@ def prepare_lstm_data(df_original: pd.DataFrame, config: dict):
     print(f"LSTM data splits (after lag drop): Train {len(df_train)}, Val {len(df_val)}, Test {len(df_test)}", flush=True)
 
     # Step 3: Scaling 
-    # Scaler for input features (lags)
+    # Scaler for input features (lags and exogenous features)
     feature_scaler_config_key = config.get("feature_scaler", "MinMax")
     feature_scaler_cls = MinMaxScaler if feature_scaler_config_key == "MinMax" else StandardScaler
     feature_scaler = feature_scaler_cls()
@@ -51,10 +65,9 @@ def prepare_lstm_data(df_original: pd.DataFrame, config: dict):
         df_val[features_for_x] = feature_scaler.transform(df_val[features_for_x])
         df_test[features_for_x] = feature_scaler.transform(df_test[features_for_x])
     else:
-        print("Warning: No input features (lags) provided for X. LSTM will effectively only see sequence index if any.", flush=True)
+        print("Warning: No input features (lags) or exogenous features provided for X. LSTM will effectively only see sequence index if any.", flush=True)
 
-
-    # Target Scaling!! (new!)
+    # Target Scaling
     target_scaler_config_key = config.get("target_scaler", "MinMax")
     target_scaler_cls = MinMaxScaler if target_scaler_config_key == "MinMax" else StandardScaler
     target_scaler = target_scaler_cls()
@@ -63,9 +76,7 @@ def prepare_lstm_data(df_original: pd.DataFrame, config: dict):
     df_val[target_col] = target_scaler.transform(df_val[[target_col]])
     df_test[target_col] = target_scaler.transform(df_test[[target_col]])
     
-    print(f"Number of input features for LSTM (X): {len(features_for_x)}", flush=True)
-    if features_for_x:
-        print(f"Input features for X (lags): {features_for_x}", flush=True)
+    print(f"Total number of input features for LSTM (X): {len(features_for_x)}", flush=True)
 
     # Step 4: Sequence construction (will use scaled features for X and scaled target for Y)
     X_train, y_train = create_sequences(df_train, features_for_x, target_col, config)

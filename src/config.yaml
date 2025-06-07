@@ -1,50 +1,95 @@
-# In your src/config.yaml
+# reminder: don't forget to add the necessary parameters to medium + long terms!
 
 short:
-  # Common or TFT specific (ensure these are distinct if needed or name uniquely)
-  input_window: 672          # Used by LSTM & TFT
-  output_horizon: 96         # Used by LSTM & TFT
-  target_column: "actual_load" # Used by LSTM & TFT
-  early_stopping_patience: 5 # Used by LSTM & TFT
-  epochs: 50                 # Used by LSTM & TFT
-  batch_size: 64             # Used by LSTM & TFT
-  learning_rate: 0.001       # Used by LSTM & TFT (can be different)
+  input_window: 672
+  min_input_window: 96
+  output_horizon: 96
+  target_column: "actual_load"
+  early_stopping_patience: 5
+  epochs: 50            
+  batch_size: 64            
+  learning_rate: 0.001  
+  train_split: 0.8
+  val_split: 0.1
+  run_tag: "short_exog_baseline" 
 
-  # ... (TFT specific params like hidden_size, attention_head_size etc.) ...
-  # num_workers: 0 # (For TFT, if you were adding it)
-  # gradient_clip_val: 0.1
-  # log_every_n_steps: 10
-  # run_tag: "short_v1.1"
-  train_split: 0.8      # Used by both data_processing if they use this key
-  val_split: 0.1        # Used by both data_processing if they use this key
+  # LSTM
+  lags: [1, 2, 96, 192, 288, 672]
+  feature_scaler: "MinMax"     
+  target_scaler: "MinMax"    
+  lstm_units: 64      
+  dropout_rate: 0.2       
+  loss_function: "mae"
+  exogenous_features: [ 
+      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", 
+      "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
+      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
+      "wind_onshore_capacity", "wind_onshore_generation"
+    ]
 
+  # TFT
+  hidden_size: 16              
+  attention_head_size: 1     
+  dropout: 0.1                 
+  # log_interval: 10              # Used by TFT model, keep if needed, not usually tuned
+  # reduce_on_plateau_patience: 4 # Used by TFT model, keep if needed, not usually tuned
+  gradient_clip_val: 0.1       
+  # log_every_n_steps: 10         # For Trainer's logger, not typically tuned
 
-  # LSTM specific parameters
-  lags: [1, 2, 96, 192, 288, 672] # For LSTM data_processing
-  feature_scaler: "MinMax"       # For LSTM X features (lags)
-  target_scaler: "MinMax"        # For LSTM Y target (actual_load)
-  lstm_units: 64                 # For LSTM model
-  dropout_rate: 0.2              # For LSTM model
-  loss_function: "mae"           # For LSTM model (CRITICAL for scaled targets)
+  # HPO
+  epochs_hpo: 15
+  early_stopping_patience_hpo: 3
+  hpo_pruner_warmup: 2
+  # hpo_timeout_seconds: 3600 # Optional
 
 medium:
-  input_window: 2016             # 21 days
-  output_horizon: 672            # 7 days
-  lags: [1, 96, 672, 1344, 2016]
-  scaler: "MinMax"
-  target_column: "actual_load" 
+  input_window: 2016         
+  output_horizon: 672    
+  target_column: "actual_load"   
   early_stopping_patience: 5
   epochs: 50
   batch_size: 64
   learning_rate: 0.001
+  train_split: 0.8            
+  val_split: 0.1          
+  run_tag: "medium_exog_baseline" 
+
+#LSTM specific parameters
+  lags: [1, 96, 672, 1344, 2016]
+  feature_scaler: "MinMax"     
+  target_scaler: "MinMax"
+  lstm_units: 64      
+  dropout_rate: 0.2              
+  loss_function: "mae"
+  exogenous_features: [ 
+      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", 
+      "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
+      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
+      "wind_onshore_capacity", "wind_onshore_generation"
+    ]
 
 long:
-  input_window: 4032             # 56 days
-  output_horizon: 2880           # 30 days
-  lags: [1, 96, 672, 1440, 2880]
-  scaler: "MinMax"
-  target_column: "actual_load" 
+  input_window: 4032             
+  output_horizon: 2880           
+  target_column: "actual_load"  
   early_stopping_patience: 5
   epochs: 50
-  batch_size: 64
+  batch_size: 4
   learning_rate: 0.001
+  train_split: 0.8             
+  val_split: 0.1           
+  run_tag: "long_exog_baseline"  
+
+#LSTM specific parameters
+  lags: [1, 96, 672, 1440, 2880] 
+  feature_scaler: "MinMax"     
+  target_scaler: "MinMax"
+  lstm_units: 64      
+  dropout_rate: 0.2              
+  loss_function: "mae"
+  exogenous_features: [
+      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", 
+      "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
+      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
+      "wind_onshore_capacity", "wind_onshore_generation"
+    ]

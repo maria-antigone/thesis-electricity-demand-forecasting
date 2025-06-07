@@ -24,12 +24,19 @@ def split_dataset(df: pd.DataFrame, config: dict):
     return train, val, test
 
 def create_tft_dataset(df: pd.DataFrame, config: dict, target_col: str):
+
+    min_enc_len = config.get('min_input_window', config['input_window'] // 7 or 24)
+    if min_enc_len > config['input_window']: # Sanity check
+        min_enc_len = config['input_window']
+    print(f"TimeSeriesDataSet using: max_encoder_length={config['input_window']}, min_encoder_length={min_enc_len}", flush=True)
+
     return TimeSeriesDataSet(
         df,
         time_idx="time_idx",
         target=target_col,
         group_ids=["series_id"],
         max_encoder_length=config["input_window"],
+        min_encoder_length = min_enc_len,
         max_prediction_length=config["output_horizon"],
         time_varying_known_reals=[
             "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", "temperature",
@@ -42,9 +49,19 @@ def create_tft_dataset(df: pd.DataFrame, config: dict, target_col: str):
         add_relative_time_idx=True,
         add_target_scales=True,
         add_encoder_length=True,
+        allow_missing_timesteps=True
     )
 
 def create_dataloaders(train_df, val_df, test_df, config, target_col):
+    print(f"Inside create_dataloaders: train_df length: {len(train_df)}, val_df length: {len(val_df)}", flush=True)
+    print(f"Config input_window (max_encoder_length): {config['input_window']}, output_horizon (max_prediction_length): {config['output_horizon']}", flush=True)
+    
+    if len(train_df) < config['input_window'] + config['output_horizon']:
+        print("CRITICAL WARNING: train_df is too short to create any sequences!", flush=True)
+    if len(val_df) < config['input_window'] + config['output_horizon']:
+        print("CRITICAL WARNING: val_df is too short to create any sequences!", flush=True)
+
+    training = create_tft_dataset(train_df, config, target_col)
     training = create_tft_dataset(train_df, config, target_col)
     validation = create_tft_dataset(val_df, config, target_col)
     testing = create_tft_dataset(test_df, config, target_col)
