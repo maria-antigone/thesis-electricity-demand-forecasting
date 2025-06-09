@@ -7,7 +7,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 from optuna.integration import KerasPruningCallback
 
 from utils_lstm import load_config as load_config_section, build_lstm_model
-from data_processing_lstm import prepare_lstm_data
+from data_processing_lstm import prepare_lstm_data, encode_cyclical_features
 
 import tensorflow as tf
 
@@ -25,15 +25,14 @@ else:
     print("No GPUs detected by TensorFlow.", flush=True)
 print("Logical GPU devices available to TensorFlow:", tf.config.list_logical_devices('GPU'), flush=True)
 
-def objective(trial: optuna.trial.Trial, base_config: dict, X_train_data: np.ndarray, y_train_data: np.ndarray, X_val_data: np.ndarray, y_val_data:np.ndarray) -> float:
+def objective(trial: optuna.trial.Trial, base_config: dict, X_train_data, y_train_data, X_val_data, y_val_data) -> float:
     trial_config = base_config.copy()
 
     # suggest hyperparameters for trial
     trial_config['learning_rate'] = trial.suggest_float('learning_rate', 1e-4, 1e-2, log = True)
-    trial_config['lstm_units'] = trial.suggest_int('lstm_units', 32, 128, step=16)
+    trial_config['lstm_units'] = trial.suggest_int('lstm_units', 32, 256, step=32)
     trial_config['dropout_rate'] = trial.suggest_float('dropout_rate', 0.1, 0.5)
-    # for now keep batch size fixed from configuration, but later can also tune
-    # trial_config['batch_size'] = trial.suggest_categorical('batch_size', [32, 64])
+    trial_config['batch_size'] = trial.suggest_categorical('batch_size', [16, 34, 64])
     print(f"\nTrial {trial.number}: starting with params: {trial.params}", flush=True)
 
     # build model
@@ -48,7 +47,7 @@ def objective(trial: optuna.trial.Trial, base_config: dict, X_train_data: np.nda
         monitor='val_mae',
         patience=hpo_patience,
         restore_best_weights=True,
-        verbose=1
+        verbose=2
     )
 
     pruning_cb = KerasPruningCallback(
@@ -63,7 +62,7 @@ def objective(trial: optuna.trial.Trial, base_config: dict, X_train_data: np.nda
         validation_data=(X_val_data, y_val_data),
         epochs=hpo_epochs,
         batch_size=trial_config.get('batch_size', 64),
-        verbose=1,
+        verbose=2,
         callbacks=[early_stopping_cb, pruning_cb]
     )
 
@@ -79,7 +78,7 @@ def objective(trial: optuna.trial.Trial, base_config: dict, X_train_data: np.nda
 
 if __name__ == "__main__":
     HORIZON_TO_TUNE = "short"
-    N_TRIALS = 5
+    N_TRIALS = 20
 
     print(f"Starting hyperparameter tuning for LSTM with horizon: {HORIZON_TO_TUNE}", flush=True)
 
@@ -94,6 +93,7 @@ if __name__ == "__main__":
     data_file_name = "merged_dataset_featurized.csv"
     data_path = os.path.join(project_base_dir, "data", "processed", data_file_name)
     raw_df_hpo = pd.read_csv(data_path, sep=";", parse_dates=["utc_timestamp"], index_col="utc_timestamp")
+    raw_df_hpo = encode_cyclical_features(raw_df_hpo)
 
     # Using same prepare_lstm_data function
     X_train, y_train, X_val, y_val, _, _, _, _ = \

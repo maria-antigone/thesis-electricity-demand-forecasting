@@ -20,12 +20,17 @@ short:
   lstm_units: 64      
   dropout_rate: 0.2       
   loss_function: "mae"
-  exogenous_features: [ 
-      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", 
+  exogenous_features: [
+      "hour_sin", "hour_cos", 
+      "weekday_sin", "weekday_cos", 
+      "month_sin", "month_cos",
+      "is_daylight", "year", "weekend_flag", "holiday_flag", 
       "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
       "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
       "wind_onshore_capacity", "wind_onshore_generation"
     ]
+
+  num_workers: 2
 
   # TFT
   hidden_size: 16              
@@ -41,6 +46,14 @@ short:
   early_stopping_patience_hpo: 3
   hpo_pruner_warmup: 2
   # hpo_timeout_seconds: 3600 # Optional
+
+  exogenous_features_tft: [
+      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", 
+      "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
+      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
+      "wind_onshore_capacity", "wind_onshore_generation"
+  ]
+  run_tag_tft: "short_baseline_raw_features"
 
 medium:
   input_window: 2016         

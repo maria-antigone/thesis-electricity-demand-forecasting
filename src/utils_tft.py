@@ -37,6 +37,8 @@ def get_callbacks(output_dir, config):
 def get_trainer(config, output_dir, callbacks):
     return Trainer(
         max_epochs=config["epochs"],
+        accelerator="gpu",
+        devices=1,
         gradient_clip_val=0.1,
         callbacks=callbacks,
         default_root_dir=output_dir,

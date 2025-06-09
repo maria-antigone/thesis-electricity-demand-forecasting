@@ -7,7 +7,7 @@ import pandas as pd
 import argparse
 from tensorflow.keras.callbacks import EarlyStopping, CSVLogger as KerasCSVLogger
 from utils_lstm import load_config as load_config_section, build_lstm_model
-from data_processing_lstm import prepare_lstm_data
+from data_processing_lstm import prepare_lstm_data, encode_cyclical_features
 from metrics import mae as calculate_mae_metric, rmse as calculate_rmse_metric, mape as calculate_mape_metric # Renamed to avoid conflict
 
 import tensorflow as tf
@@ -52,6 +52,7 @@ data_file_name_main = "merged_dataset_featurized.csv"
 data_path_main = os.path.join(project_base_dir_main, "data", "processed", data_file_name_main)
 print(f"Loading LSTM data from: {data_path_main}", flush=True)
 raw_df = pd.read_csv(data_path_main, sep=";", parse_dates=["utc_timestamp"], index_col="utc_timestamp")
+raw_df = encode_cyclical_features(raw_df)
 
 X_train, y_train, X_val, y_val, X_test, y_test, input_feature_scaler, target_scaler = \
     prepare_lstm_data(raw_df, config=config)

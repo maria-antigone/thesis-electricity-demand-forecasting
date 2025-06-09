@@ -9,7 +9,7 @@ from pytorch_lightning.callbacks import EarlyStopping
 from optuna.integration import PyTorchLightningPruningCallback
 
 from utils_lstm import load_config as load_config_section
-from data_processing_tft import add_time_idx_and_series_id, split_dataset, create_dataloaders
+from data_processing_tft import add_time_idx_and_series_id, split_dataset, create_dataloaders, encode_cyclical_features
 from utils_tft import init_tft_model, get_callbacks as get_base_callbacks
 
 import warnings
@@ -31,7 +31,7 @@ def objective_tft(trial: optuna.trial.Trial, base_config: dict, train_df_hpo: pd
     
     # Prepare data loaders - if batch_size is fixed, dataloades could be prepared once outside. here: assume create_dataloaders uses trial_config['batch_size']
     train_loader, val_loader, _, training_dataset_for_trial = create_dataloaders(
-        train_df_hpo, val_df_hpo, val_df_hpo.sample(min(len(val_df_hpo), 10)) if len(val_df_hpo) > 0 else val_df_hpo,
+        train_df_hpo, val_df_hpo, val_df_hpo.head(1) if not val_df_hpo.empty else val_df_hpo,
         trial_config, 
         trial_config["target_column"]
     )
@@ -47,12 +47,12 @@ def objective_tft(trial: optuna.trial.Trial, base_config: dict, train_df_hpo: pd
     hpo_epochs = trial_config.get('epochs_hpo', 15)  # Few
     hpo_patience = trial_config.get('early_stopping_patience_hpo', 3)  # Strict
 
-    early_stopping_cb_hpo = EarlyStopping(
-        monitor = 'val_loss',
-        patience = hpo_patience,
-        mode = 'min',
-        verbose = False,
-    )
+    #early_stopping_cb_hpo = EarlyStopping(
+    #    monitor = 'val_loss',
+    #    patience = hpo_patience,
+    #    mode = 'min',
+    #    verbose = False,
+    #)
 
     pruning_cb_tft = PyTorchLightningPruningCallback(trial, monitor='val_loss')
 
@@ -61,9 +61,9 @@ def objective_tft(trial: optuna.trial.Trial, base_config: dict, train_df_hpo: pd
         max_epochs=hpo_epochs,
         accelerator="gpu",
         devices=1,
-        callbacks=[early_stopping_cb_hpo, pruning_cb_tft],
-        logger=True,
-        enable_progress_bar = False,
+        callbacks=[pruning_cb_tft],
+        logger=False,
+        enable_progress_bar = True,
         enable_checkpointing=False,
         gradient_clip_val=trial_config['gradient_clip_val'],
     )
@@ -72,28 +72,22 @@ def objective_tft(trial: optuna.trial.Trial, base_config: dict, train_df_hpo: pd
     try:
         trainer.fit(model, train_loader, val_loader)
     except optuna.exceptions.TrialPruned:
-        print(f"Trial {trial.number} was pruned.", flush=True)
         raise
     except Exception as e:
         print(f"Trial {trial.number} failed with error: {e}", flush=True)
         return float('inf')
     
-    # Return metric to be optimized
-    val_loss_value = trainer.callback_metrics.get('val_loss')
-    if val_loss_value is None:
-        print(f"Trial {trial.number}: val_loss not found in callback_metrics. Pruner might have a value.", flush=True)
-        if trial.state == optuna.trial.TrialState.PRUNED:
-            pass
-        best_val_loss_for_trial = val_loss_value.item() if val_loss_value is not None else float('inf')
-
-    else:
-        best_val_loss_for_trial
-    if trial.should_prune():
-        print(f"Trial {trial.number} explicitly checked as pruned after fit.", flush=True)
-        raise optuna.exceptions.TrialPruned()
+    final_val_loss = trainer.callback_metrics.get("val_loss")
     
-    print(f"Trial {trial.number}: Finished. Best val_loss: {best_val_loss_for_trial:.6f}", flush=True)
-    return best_val_loss_for_trial
+    if final_val_loss is None:
+        print(f"Trial {trial.number}: No validation loss found in callback metrics. Returning inf.", flush=True)
+        return float('inf')
+    
+    final_val_loss_value = final_val_loss.item()
+
+    print(f"Trial {trial.number}: Finished. Best val_loss: {final_val_loss_value:.6f}", flush=True)
+
+    return final_val_loss_value
 
 if __name__ == "__main__":
     seed_everything(42, workers=True)
@@ -111,6 +105,7 @@ if __name__ == "__main__":
     data_file_name = "merged_dataset_featurized.csv"
     data_path = os.path.join(project_base_dir, "data", "processed", data_file_name)
     raw_df_hpo_tft = pd.read_csv(data_path, sep=";", parse_dates=["utc_timestamp"])
+    raw_df_hpo_tft = encode_cyclical_features(raw_df_hpo_tft)
 
     df_with_ids = add_time_idx_and_series_id(raw_df_hpo_tft)
     train_df, val_df, _ = split_dataset(df_with_ids, base_config)

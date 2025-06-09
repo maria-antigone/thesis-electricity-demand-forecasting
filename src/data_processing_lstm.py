@@ -4,6 +4,19 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import yaml
 import os
 
+def encode_cyclical_features(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    if 'hour' in df.columns:
+        df['hour_sin'] = np.sin(2 * np.pi * df['hour'] / 24.0)
+        df['hour_cos'] = np.cos(2 * np.pi * df['hour'] / 24.0)
+    if 'weekday' in df.columns:
+        df['weekday_sin'] = np.sin(2 * np.pi * df['weekday'] / 7.0)
+        df['weekday_cos'] = np.cos(2 * np.pi * df['weekday'] / 7.0)
+    if 'month' in df.columns:
+        df['month_sin'] = np.sin(2 * np.pi * df['month'] / 12.0)
+        df['month_cos'] = np.cos(2 * np.pi * df['month'] / 12.0)
+    return df
+
 def load_config(horizon="short"):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     config_path = os.path.join(script_dir, "config.yaml")
@@ -56,7 +69,10 @@ def prepare_lstm_data(df_original: pd.DataFrame, config: dict):
     # Step 3: Scaling 
     # Scaler for input features (lags and exogenous features)
     feature_scaler_config_key = config.get("feature_scaler", "MinMax")
-    feature_scaler_cls = MinMaxScaler if feature_scaler_config_key == "MinMax" else StandardScaler
+    if feature_scaler_config_key == "Standard":
+        feature_scaler_cls = StandardScaler
+    else: # defaulting to minmax
+        feature_scaler_cls = MinMaxScaler
     feature_scaler = feature_scaler_cls()
 
     # Fit scaler ONLY on training data features and transform all sets
@@ -69,7 +85,10 @@ def prepare_lstm_data(df_original: pd.DataFrame, config: dict):
 
     # Target Scaling
     target_scaler_config_key = config.get("target_scaler", "MinMax")
-    target_scaler_cls = MinMaxScaler if target_scaler_config_key == "MinMax" else StandardScaler
+    if target_scaler_config_key == "Standard":
+        target_scaler_cls = StandardScaler
+    else:  # defaulting to minmax
+        target_scaler_cls = MinMaxScaler
     target_scaler = target_scaler_cls()
 
     df_train[target_col] = target_scaler.fit_transform(df_train[[target_col]])
