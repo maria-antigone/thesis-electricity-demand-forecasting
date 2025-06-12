@@ -1,108 +1,135 @@
-# reminder: don't forget to add the necessary parameters to medium + long terms!
-
 short:
   input_window: 672
-  min_input_window: 96
   output_horizon: 96
+  min_input_window: 96
   target_column: "actual_load"
-  early_stopping_patience: 5
-  epochs: 50            
-  batch_size: 64            
-  learning_rate: 0.001  
   train_split: 0.8
   val_split: 0.1
-  run_tag: "short_exog_baseline" 
-
-  # LSTM
-  lags: [1, 2, 96, 192, 288, 672]
-  feature_scaler: "MinMax"     
-  target_scaler: "MinMax"    
-  lstm_units: 64      
-  dropout_rate: 0.2       
-  loss_function: "mae"
-  exogenous_features: [
-      "hour_sin", "hour_cos", 
-      "weekday_sin", "weekday_cos", 
-      "month_sin", "month_cos",
-      "is_daylight", "year", "weekend_flag", "holiday_flag", 
-      "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
-      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
-      "wind_onshore_capacity", "wind_onshore_generation"
-    ]
-
   num_workers: 2
 
-  # TFT
-  hidden_size: 16              
-  attention_head_size: 1     
-  dropout: 0.1                 
-  # log_interval: 10              # Used by TFT model, keep if needed, not usually tuned
-  # reduce_on_plateau_patience: 4 # Used by TFT model, keep if needed, not usually tuned
-  gradient_clip_val: 0.1       
-  # log_every_n_steps: 10         # For Trainer's logger, not typically tuned
+  # LSTM (HPO)
+  run_tag: "baseline_final_lstm_short"
+  batch_size: 32
+  early_stopping_patience: 2
+  epochs: 7
+  # learning rate
 
-  # HPO
+  # HPO parameters
   epochs_hpo: 15
   early_stopping_patience_hpo: 3
   hpo_pruner_warmup: 2
-  # hpo_timeout_seconds: 3600 # Optional
 
+  # LSTM Parameters
+  learning_rate: 0.001
+  lags: [1, 2, 96, 192, 288, 672]
+  feature_scaler: "MinMax"
+  target_scaler: "MinMax"
+  lstm_units: 32
+  dropout_rate: 0.1
+  loss_function: "mae"
+  exogenous_features: [
+      "hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos",
+      "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature",
+      "solar_capacity", "solar_generation", "wind_capacity", "wind_generation",
+      "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"
+    ]
+
+  # TFT Parameters
+  run_tag_tft: "baseline_final_tft_short"
+  hidden_size: 16
+  attention_head_size: 1
+  dropout: 0.1
+  gradient_clip_val: 0.1
   exogenous_features_tft: [
-      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", 
-      "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
-      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
+      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag",
+      "temperature", "solar_capacity", "solar_generation", "wind_capacity",
+      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation",
       "wind_onshore_capacity", "wind_onshore_generation"
-  ]
-  run_tag_tft: "short_baseline_raw_features"
+    ]
 
 medium:
-  input_window: 2016         
-  output_horizon: 672    
-  target_column: "actual_load"   
-  early_stopping_patience: 5
-  epochs: 50
-  batch_size: 64
-  learning_rate: 0.001
-  train_split: 0.8            
-  val_split: 0.1          
-  run_tag: "medium_exog_baseline" 
+  input_window: 1344
+  output_horizon: 672
+  min_input_window: 96
+  target_column: "actual_load"
+  train_split: 0.8
+  val_split: 0.1
+  num_workers: 2
 
-#LSTM specific parameters
-  lags: [1, 96, 672, 1344, 2016]
-  feature_scaler: "MinMax"     
+  # Short tuned parameters
+  run_tag: "baseline_final_lstm_medium"
+  early_stopping_patience: 2
+  epochs: 7
+  batch_size: 32
+
+  # HPO Parameters
+  epochs_hpo: 15
+  early_stopping_patience_hpo: 3
+  hpo_pruner_warmup: 2
+
+  # LSTM parameters
+  learning_rate: 0.001
+  lags: [1, 96, 672, 1344]
+  feature_scaler: "MinMax"
   target_scaler: "MinMax"
-  lstm_units: 64      
-  dropout_rate: 0.2              
+  lstm_units: 32
+  dropout_rate: 0.1
   loss_function: "mae"
-  exogenous_features: [ 
-      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", 
-      "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
-      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
+  exogenous_features: [
+      "hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos",
+      "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature",
+      "solar_capacity", "solar_generation", "wind_capacity", "wind_generation",
+      "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"
+    ]
+
+  # TFT parameters
+  run_tag_tft: "baseline_final_tft_medium"
+  hidden_size: 16
+  attention_head_size: 1
+  dropout: 0.1
+  gradient_clip_val: 0.1
+  exogenous_features_tft: [
+      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag",
+      "temperature", "solar_capacity", "solar_generation", "wind_capacity",
+      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation",
       "wind_onshore_capacity", "wind_onshore_generation"
     ]
 
 long:
-  input_window: 4032             
-  output_horizon: 2880           
-  target_column: "actual_load"  
-  early_stopping_patience: 5
-  epochs: 50
-  batch_size: 4
-  learning_rate: 0.001
-  train_split: 0.8             
-  val_split: 0.1           
-  run_tag: "long_exog_baseline"  
+  input_window: 672
+  output_horizon: 2880
+  min_input_window: 96
+  target_column: "actual_load"
+  train_split: 0.8
+  val_split: 0.1
+  num_workers: 2
 
-#LSTM specific parameters
-  lags: [1, 96, 672, 1440, 2880] 
-  feature_scaler: "MinMax"     
+  run_tag: "baseline_final_lstm_long"
+  epochs: 7
+  early_stopping_patience: 2
+  batch_size: 4
+
+  lags: [1, 96, 672]
+  feature_scaler: "MinMax"
   target_scaler: "MinMax"
-  lstm_units: 64      
-  dropout_rate: 0.2              
+  lstm_units: 32
+  dropout_rate: 0.1
   loss_function: "mae"
   exogenous_features: [
-      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", 
-      "temperature", "solar_capacity", "solar_generation", "wind_capacity", 
-      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", 
+      "hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos",
+      "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature",
+      "solar_capacity", "solar_generation", "wind_capacity", "wind_generation",
+      "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"
+    ]
+
+  run_tag_tft: "baseline_final_tft_long"
+  hidden_size: 16
+  attention_head_size: 1
+  dropout: 0.1
+  gradient_clip_val: 0.1
+  exogenous_features_tft: [
+      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag",
+      "temperature", "solar_capacity", "solar_generation", "wind_capacity",
+      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation",
       "wind_onshore_capacity", "wind_onshore_generation"
     ]

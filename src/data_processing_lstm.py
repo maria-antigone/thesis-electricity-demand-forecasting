@@ -64,6 +64,8 @@ def prepare_lstm_data(df_original: pd.DataFrame, config: dict):
     df_val = df.iloc[train_end_idx:val_end_idx].copy()
     df_test = df.iloc[val_end_idx:].copy()
 
+    print(f"--- The Test Set Start Date is: {df_test.index[0]} ---")
+
     print(f"LSTM data splits (after lag drop): Train {len(df_train)}, Val {len(df_val)}, Test {len(df_test)}", flush=True)
 
     # Step 3: Scaling 

@@ -1,0 +1,41 @@
+Wed Jun 11 16:49:53 2025       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.247.01             Driver Version: 535.247.01   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA A40                     On  | 00000000:17:00.0 Off |                    0 |
+|  0%   29C    P8              22W / 300W |      3MiB / 46068MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40                     On  | 00000000:CA:00.0 Off |                    0 |
+|  0%   30C    P8              21W / 300W |      3MiB / 46068MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+Running short horizon...
+--- Running TFT Training for SHORT Horizon ---
+TFT Config loaded: {'input_window': 672, 'output_horizon': 96, 'min_input_window': 96, 'target_column': 'actual_load', 'train_split': 0.8, 'val_split': 0.1, 'num_workers': 2, 'run_tag': 'baseline_final_lstm_short', 'batch_size': 32, 'early_stopping_patience': 2, 'epochs': 7, 'epochs_hpo': 15, 'early_stopping_patience_hpo': 3, 'hpo_pruner_warmup': 2, 'learning_rate': 0.001, 'lags': [1, 2, 96, 192, 288, 672], 'feature_scaler': 'MinMax', 'target_scaler': 'MinMax', 'lstm_units': 32, 'dropout_rate': 0.1, 'loss_function': 'mae', 'exogenous_features': ['hour_sin', 'hour_cos', 'weekday_sin', 'weekday_cos', 'month_sin', 'month_cos', 'is_daylight', 'year', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation'], 'run_tag_tft': 'baseline_final_tft_short', 'hidden_size': 16, 'attention_head_size': 1, 'dropout': 0.1, 'gradient_clip_val': 0.1, 'exogenous_features_tft': ['hour', 'is_daylight', 'month', 'year', 'weekday', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']}
+TFT run outputs will be saved in: /home/u563586/tft_project/outputs/tft_runs/tft_baseline_final_lstm_short_h96_w672
+Loading TFT data from: /home/u563586/tft_project/data/processed/merged_dataset_featurized.csv
+Creating Dataloaders...
+Inside create_dataloaders: train_df length: 140133, val_df length: 17517, test_df length: 17517
+Config for DataLoaders: input_window (max_encoder_length): 672, output_horizon (max_prediction_length): 96
+TFT will be trained with the following 16 time-varying known features: ['hour', 'is_daylight', 'month', 'year', 'weekday', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']
+TimeSeriesDataSet using: max_encoder_length=672, min_encoder_length=96
+TFT will be trained with the following 16 time-varying known features: ['hour', 'is_daylight', 'month', 'year', 'weekday', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']
+TimeSeriesDataSet using: max_encoder_length=672, min_encoder_length=96
+TFT will be trained with the following 16 time-varying known features: ['hour', 'is_daylight', 'month', 'year', 'weekday', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']
+TimeSeriesDataSet using: max_encoder_length=672, min_encoder_length=96
+DataLoaders will use num_workers: 2
+Initializing TFT model...
+Starting TFT training...

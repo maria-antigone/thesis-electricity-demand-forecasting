@@ -61,10 +61,13 @@ if __name__ == "__main__":
 
     print("Starting TFT training...", flush=True)
     start_training_time = time.time()
+
     trainer.fit(model, train_loader, val_loader)
     end_training_time = time.time()
     total_training_duration = end_training_time - start_training_time
     print(f"TFT training finished in {total_training_duration:.2f} seconds.", flush=True)
+
+    # Dynamic Evaluation and Saving logic
 
     print("\nEvaluating TFT model on test set...", flush=True)
     
@@ -72,26 +75,40 @@ if __name__ == "__main__":
     print(f"Loading best model for evaluation from: {best_model_path}")
     best_model = TemporalFusionTransformer.load_from_checkpoint(best_model_path)
 
+    # Make predictions on the test set
     actuals = torch.cat([y[0] for x, y in iter(test_loader)])
     predictions = best_model.predict(test_loader, mode="prediction")
 
-    predictions_csv_path = os.path.join(output_dir_run_tft, "tft_predictions.csv")
-    pd.DataFrame({
-        "actual": actuals.numpy().flatten(),
-        "prediction": predictions.numpy().flatten()
-    }).to_csv(predictions_csv_path, index=False)
-    print(f"TFT predictions saved to: {predictions_csv_path}", flush=True)
+    # Dynamically select the final step for evaluation based on config
+    final_step = config["output_horizon"]
+    final_step_index = final_step - 1 # Python is 0-indexed
 
-    y_true = actuals.numpy()
-    y_pred = predictions.numpy()
+    # Slice the tensors to get only the FINAL step of the forecast horizon
+    y_true_final_step = actuals[:, final_step_index].numpy()
+    y_pred_final_step = predictions[:, final_step_index].numpy()
 
-    final_mae = mae(y_true, y_pred)
-    final_rmse = rmse(y_true, y_pred)
-    final_mape = mape(y_true, y_pred)
+    # Calculate metrics using only the final step
+    final_mae = mae(y_true_final_step, y_pred_final_step)
+    final_rmse = rmse(y_true_final_step, y_pred_final_step)
+    final_mape = mape(y_true_final_step, y_pred_final_step)
 
-    print(f"\nTFT Final Evaluation Metrics ({config_horizon_name.upper()} Horizon):", flush=True)
+    print(f"\nTFT Final Evaluation Metrics (Test Set, Horizon: Step {final_step}):", flush=True)
     print(f"  MAE:  {final_mae:.4f}")
     print(f"  RMSE: {final_rmse:.4f}")
     print(f"  MAPE: {final_mape:.2f}%")
+
+    # Dynamically save predictions (first and final step)
+    predictions_to_save = {
+        'actual_mw_step_1': actuals[:, 0].numpy().flatten(),
+        'predicted_mw_step_1': predictions[:, 0].numpy().flatten()
+    }
+    if final_step > 1:
+        predictions_to_save[f'actual_mw_step_{final_step}'] = y_true_final_step.flatten()
+        predictions_to_save[f'predicted_mw_step_{final_step}'] = y_pred_final_step.flatten()
+    
+    df_predictions_mw = pd.DataFrame(predictions_to_save)
+    predictions_mw_csv_path = os.path.join(output_dir_run_tft, "tft_predictions_mw.csv")
+    df_predictions_mw.to_csv(predictions_mw_csv_path, index=False)
+    print(f"TFT predictions (MW scale) saved to: {predictions_mw_csv_path}", flush=True)
 
     print(f"\nTFT script for horizon '{config_horizon_name}' finished.", flush=True)

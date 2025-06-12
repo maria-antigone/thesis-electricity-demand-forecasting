@@ -1,4 +1,7 @@
 import os
+os.environ['TF_GPU_ALLOCATOR'] = 'cuda_malloc_async'
+
+import os
 import time
 import numpy as np
 import pandas as pd
@@ -28,51 +31,43 @@ print("Logical GPU devices available to TensorFlow:", tf.config.list_logical_dev
 def objective(trial: optuna.trial.Trial, base_config: dict, X_train_data, y_train_data, X_val_data, y_val_data) -> float:
     trial_config = base_config.copy()
 
-    # suggest hyperparameters for trial
-    trial_config['learning_rate'] = trial.suggest_float('learning_rate', 1e-4, 1e-2, log = True)
-    trial_config['lstm_units'] = trial.suggest_int('lstm_units', 32, 256, step=32)
+    # Suggest hyperparameters for the trial
+    trial_config['learning_rate'] = trial.suggest_float('learning_rate', 1e-4, 1e-2, log=True)
+    trial_config['lstm_units'] = trial.suggest_categorical('lstm_units', [16, 32, 48])
     trial_config['dropout_rate'] = trial.suggest_float('dropout_rate', 0.1, 0.5)
-    trial_config['batch_size'] = trial.suggest_categorical('batch_size', [16, 34, 64])
-    print(f"\nTrial {trial.number}: starting with params: {trial.params}", flush=True)
+    
+    # Using a safer, more practical range for batch size
+    trial_config['batch_size'] = trial.suggest_categorical('batch_size', [16, 32])
 
-    # build model
-    input_shape = (X_train_data.shape[1], X_train_data.shape[2]) # ensure input shape is correct
+    print(f"\nTrial {trial.number}: Starting with params: {trial.params}", flush=True)
+
+    input_shape = (X_train_data.shape[1], X_train_data.shape[2])
     model = build_lstm_model(input_shape, trial_config["output_horizon"], trial_config)
 
-    # callbacks
-    hpo_epochs = trial_config.get('epochs_hpo', 15) # few for HPO trial
-    hpo_patience = trial_config.get('early_stopping_patience_hpo', 3) # strict
+    # Using strict callbacks for HPO efficiency
+    hpo_epochs = trial_config.get('epochs_hpo', 10)
+    hpo_patience = trial_config.get('early_stopping_patience_hpo', 3)
 
-    early_stopping_cb = EarlyStopping(
-        monitor='val_mae',
-        patience=hpo_patience,
-        restore_best_weights=True,
-        verbose=2
-    )
+    early_stopping_cb = EarlyStopping(monitor='val_mae', patience=hpo_patience, restore_best_weights=True)
+    pruning_cb = KerasPruningCallback(trial, 'val_mae')
 
-    pruning_cb = KerasPruningCallback(
-        trial,
-        'val_mae'
-    )
-
-    # train model
     history = model.fit(
         X_train_data,
         y_train_data,
         validation_data=(X_val_data, y_val_data),
         epochs=hpo_epochs,
-        batch_size=trial_config.get('batch_size', 64),
-        verbose=2,
+        batch_size=trial_config['batch_size'],
+        # Change verbose to 2 for cleaner logs (one line per epoch)
+        verbose=2, 
         callbacks=[early_stopping_cb, pruning_cb]
     )
 
-    # return metric to be optimized
     best_val_mae_for_trial = min(history.history['val_mae']) if 'val_mae' in history.history and history.history['val_mae'] else float('inf')
 
     if trial.should_prune():
         raise optuna.exceptions.TrialPruned
 
-    print(f"Trial {trial.number}: completed with best val_mae: {best_val_mae_for_trial:6f}", flush=True)
+    print(f"Trial {trial.number}: Completed with best val_mae: {best_val_mae_for_trial:.6f}", flush=True)
 
     return best_val_mae_for_trial
 
@@ -99,6 +94,14 @@ if __name__ == "__main__":
     X_train, y_train, X_val, y_val, _, _, _, _ = \
         prepare_lstm_data(raw_df_hpo, config=base_config)
     print(f"Data prepared: X_train shape {X_train.shape}, X_val shape {X_val.shape}", flush=True)
+
+    # subset data for faster computation
+    subset_percentage = 0.50
+    subset_start_index = int(len(X_train) * (1 - subset_percentage))
+    X_train_subset = X_train[subset_start_index:]
+    y_train_subset = y_train[subset_start_index:]
+
+    print(f"Using a {subset_percentage*100}% subset of training data for HPO. New shape: {X_train_subset.shape}")
     
     if X_train.size == 0 or X_val.size == 0:
         print("Error: Training or validation data is empty. Check data preparation and config.", flush=True)
@@ -116,9 +119,9 @@ if __name__ == "__main__":
     # start optimization
     print(f"Starting Optuna optimization with {N_TRIALS} trials...", flush=True)
     study.optimize(
-        lambda trial: objective(trial, base_config, X_train, y_train, X_val, y_val),
+        lambda trial: objective(trial, base_config, X_train_subset, y_train_subset, X_val, y_val),
         n_trials=N_TRIALS,
-        timeout = base_config.get('hpo_timeout_seconds', 3600)
+        timeout=base_config.get('hpo_timeout_seconds', None)
     )
 
     # Print results:

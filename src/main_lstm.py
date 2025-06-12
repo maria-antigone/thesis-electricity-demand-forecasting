@@ -1,4 +1,4 @@
-# main_lstm_short.py
+# main_lstm.py
 
 import os
 import time
@@ -89,7 +89,7 @@ history = model.fit(
     validation_data=(X_val, y_val),
     epochs=config["epochs"],
     batch_size=config["batch_size"],
-    verbose=1,
+    verbose=2,
     callbacks=[early_stop, keras_csv_logger]
 )
 end_training_time = time.time()
@@ -98,44 +98,43 @@ print(f"LSTM training finished in {total_training_duration:.2f} seconds.", flush
 
 print("\nEvaluating LSTM model on test set...", flush=True)
 
+# Dynamic Evaluation & Saving Logic!
+
 # Step 1: Make predictions on X_test (these will be scaled)
 y_pred_scaled_lstm = model.predict(X_test)
-print(f"Shape of y_pred_scaled_lstm: {y_pred_scaled_lstm.shape}", flush=True)
-print(f"Shape of y_test (scaled): {y_test.shape}", flush=True)
 
-# Step 2: Inverse transform!
-y_pred_mw = np.zeros_like(y_pred_scaled_lstm)
-y_test_mw = np.zeros_like(y_test) # y_test from prepare_lstm_data is already scaled
+# Step 2: Inverse transform predictions and actuals to get them in MW scale
+y_pred_mw = target_scaler.inverse_transform(y_pred_scaled_lstm)
+y_test_mw = target_scaler.inverse_transform(y_test)
 
-for i in range(y_pred_scaled_lstm.shape[0]):
-    pred_sample_reshaped = y_pred_scaled_lstm[i, :].reshape(-1, 1)
-    true_sample_reshaped = y_test[i, :].reshape(-1, 1) # y_test is the scaled ground truth
-    
-    y_pred_mw[i, :] = target_scaler.inverse_transform(pred_sample_reshaped).flatten()
-    y_test_mw[i, :] = target_scaler.inverse_transform(true_sample_reshaped).flatten()
+# Step 3: Dynamically select the final step for evaluation based on config
+final_step = config["output_horizon"]
+final_step_index = final_step - 1
 
-print(f"Shape of y_pred_mw (original scale): {y_pred_mw.shape}", flush=True)
-print(f"Shape of y_test_mw (original scale): {y_test_mw.shape}", flush=True)
+# Step 4: Calculate metrics using only the FINAL step of the forecast horizon
+final_mae_mw = calculate_mae_metric(y_test_mw[:, final_step_index], y_pred_mw[:, final_step_index])
+final_rmse_mw = calculate_rmse_metric(y_test_mw[:, final_step_index], y_pred_mw[:, final_step_index])
+final_mape_mw = calculate_mape_metric(y_test_mw[:, final_step_index], y_pred_mw[:, final_step_index])
 
-# Step 3: Calculate metrics using values in original MW scale
-final_mae_mw = calculate_mae_metric(y_test_mw, y_pred_mw)
-final_rmse_mw = calculate_rmse_metric(y_test_mw, y_pred_mw)
-final_mape_mw = calculate_mape_metric(y_test_mw, y_pred_mw)
-
-print("\nLSTM Final Evaluation Metrics (Test Set, Original MW Scale):", flush=True)
+print(f"\nLSTM Final Evaluation Metrics (Test Set, Horizon: Step {final_step}):", flush=True)
 print(f"  MAE:  {final_mae_mw:.4f} MW", flush=True)
 print(f"  RMSE: {final_rmse_mw:.4f} MW", flush=True)
 print(f"  MAPE: {final_mape_mw:.2f}%", flush=True)
 
-# Step 4 (Optional): Save predictions in MW scale
-predictions_mw_csv_path = os.path.join(output_dir_run_lstm, "lstm_predictions_mw.csv")
-if forecast_horizon > 0:
-    df_predictions_mw = pd.DataFrame({
-        'actual_mw_step1': y_test_mw[:, 0].flatten(),
-        'predicted_mw_step1': y_pred_mw[:, 0].flatten()
-    })
-        
-    df_predictions_mw.to_csv(predictions_mw_csv_path, index=False)
-    print(f"LSTM predictions (MW scale) saved to: {predictions_mw_csv_path}", flush=True)
+# Step 5: Dynamically save predictions (first and final step)
+predictions_to_save = {
+    'actual_mw_step_1': y_test_mw[:, 0].flatten(),
+    'predicted_mw_step_1': y_pred_mw[:, 0].flatten()
+}
 
-print("\nLSTM script for horizon '{config_horizon_name} finished.", flush=True)
+# Only add the final step column if it's different from the first step
+if final_step > 1:
+    predictions_to_save[f'actual_mw_step_{final_step}'] = y_test_mw[:, final_step_index].flatten()
+    predictions_to_save[f'predicted_mw_step_{final_step}'] = y_pred_mw[:, final_step_index].flatten()
+
+df_predictions_mw = pd.DataFrame(predictions_to_save)
+predictions_mw_csv_path = os.path.join(output_dir_run_lstm, "lstm_predictions_mw.csv")
+df_predictions_mw.to_csv(predictions_mw_csv_path, index=False)
+print(f"LSTM predictions (MW scale) saved to: {predictions_mw_csv_path}", flush=True)
+
+print(f"\nLSTM script for horizon '{config_horizon_name}' finished.", flush=True)

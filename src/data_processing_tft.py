@@ -88,6 +88,7 @@ def create_dataloaders(train_df, val_df, test_df, config, target_col):
     if len(val_df) < min_rows_needed:
         print(f"CRITICAL WARNING: val_df (length {len(val_df)}) is shorter than min_rows_needed ({min_rows_needed}). No sequences can be created for validation.", flush=True)
     
+    # Create three separate, independent datasets
     training_dataset = create_tft_dataset(train_df, config, target_col)
     validation_dataset = create_tft_dataset(val_df, config, target_col)
     testing_dataset = create_tft_dataset(test_df, config, target_col) 
@@ -95,6 +96,7 @@ def create_dataloaders(train_df, val_df, test_df, config, target_col):
     num_workers_val = config.get("num_workers", 0) 
     print(f"DataLoaders will use num_workers: {num_workers_val}", flush=True)
     
+    # This logic for persistent_workers is from your old working file
     persistent_flag = True if num_workers_val > 0 else False
 
     train_loader = training_dataset.to_dataloader(
