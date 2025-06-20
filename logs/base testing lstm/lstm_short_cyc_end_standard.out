@@ -1,7 +1,0 @@
-LSTM Final Evaluation Metrics (Test Set, Original MW Scale):
-  MAE:  1811.0250 MW
-  RMSE: 2415.3265 MW
-  MAPE: 3.60%
-LSTM predictions (MW scale) saved to: /home/u563586/tft_project/outputs/lstm_runs/lstm_short_exog_baseline_h96_w672/lstm_predictions_mw.csv
-
-LSTM script for horizon '{config_horizon_name} finished.

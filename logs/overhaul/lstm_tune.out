@@ -1,0 +1,982 @@
+Thu Jun 12 15:45:15 2025       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.247.01             Driver Version: 535.247.01   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA A40                     On  | 00000000:17:00.0 Off |                    0 |
+|  0%   41C    P0              78W / 300W |      3MiB / 46068MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40                     On  | 00000000:CA:00.0 Off |                    0 |
+|  0%   48C    P0             114W / 300W |  45229MiB / 46068MiB |     97%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|    1   N/A  N/A    500471      C   python                                    43884MiB |
+|    1   N/A  N/A   1540294      C   python                                     1332MiB |
++---------------------------------------------------------------------------------------+
+1 Physical GPUs, 1 Logical GPUs configured for memory growth.
+Logical GPU devices available to TensorFlow: [LogicalDevice(name='/device:GPU:0', device_type='GPU')]
+Preparing full dataset for HPO...
+
+==================== Starting HPO for HORIZON: SHORT ====================
+Base configuration loaded for short: {'input_window': 672, 'output_horizon': 96, 'min_input_window': 96, 'target_column': 'actual_load', 'train_split': 0.8, 'val_split': 0.1, 'num_workers': 2, 'run_tag': 'baseline_final_lstm_short', 'batch_size': 32, 'early_stopping_patience': 2, 'epochs': 7, 'epochs_hpo': 15, 'early_stopping_patience_hpo': 3, 'hpo_pruner_warmup': 2, 'learning_rate': 0.001, 'lags': [1, 2, 96, 192, 288, 672], 'feature_scaler': 'MinMax', 'target_scaler': 'MinMax', 'lstm_units': 32, 'dropout_rate': 0.1, 'loss_function': 'mae', 'exogenous_features': ['hour_sin', 'hour_cos', 'weekday_sin', 'weekday_cos', 'month_sin', 'month_cos', 'is_daylight', 'year', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation'], 'run_tag_tft': 'baseline_final_tft_short', 'hidden_size': 16, 'attention_head_size': 1, 'dropout': 0.1, 'gradient_clip_val': 0.1, 'exogenous_features_tft': ['hour', 'is_daylight', 'month', 'year', 'weekday', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']}
+Attempting to add exogenous features: ['hour_sin', 'hour_cos', 'weekday_sin', 'weekday_cos', 'month_sin', 'month_cos', 'is_daylight', 'year', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']
+--- The Test Set Start Date is: 2019-07-02 04:30:00+00:00 ---
+LSTM data splits (after lag drop): Train 139596, Val 17449, Test 17450
+Total number of input features for LSTM (X): 25
+Data prepared for short: X_train shape (138829, 672, 25), X_val shape (16682, 672, 25)
+Using a 50.0% subset of training data for HPO. New shape: (69415, 672, 25)
+Starting Optuna optimization for short horizon with 20 trials...
+
+Trial 0: Starting with params: {'learning_rate': 0.0014484589164699753, 'lstm_units': 48, 'dropout_rate': 0.16099536603372122, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 81s - loss: 0.0589 - mae: 0.0589 - val_loss: 0.0425 - val_mae: 0.0425 - 81s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 72s - loss: 0.0416 - mae: 0.0416 - val_loss: 0.0424 - val_mae: 0.0424 - 72s/epoch - 17ms/step
+Epoch 3/15
+4339/4339 - 72s - loss: 0.0392 - mae: 0.0392 - val_loss: 0.0347 - val_mae: 0.0347 - 72s/epoch - 17ms/step
+Epoch 4/15
+4339/4339 - 77s - loss: 0.0372 - mae: 0.0372 - val_loss: 0.0462 - val_mae: 0.0462 - 77s/epoch - 18ms/step
+Epoch 5/15
+4339/4339 - 78s - loss: 0.0362 - mae: 0.0362 - val_loss: 0.0341 - val_mae: 0.0341 - 78s/epoch - 18ms/step
+Epoch 6/15
+4339/4339 - 76s - loss: 0.0359 - mae: 0.0359 - val_loss: 0.0318 - val_mae: 0.0318 - 76s/epoch - 18ms/step
+Epoch 7/15
+4339/4339 - 77s - loss: 0.0361 - mae: 0.0361 - val_loss: 0.0372 - val_mae: 0.0372 - 77s/epoch - 18ms/step
+Epoch 8/15
+4339/4339 - 77s - loss: 0.0355 - mae: 0.0355 - val_loss: 0.0338 - val_mae: 0.0338 - 77s/epoch - 18ms/step
+Epoch 9/15
+4339/4339 - 79s - loss: 0.0394 - mae: 0.0394 - val_loss: 0.0338 - val_mae: 0.0338 - 79s/epoch - 18ms/step
+Trial 0: Completed with best val_mae: 0.031776
+
+Trial 1: Starting with params: {'learning_rate': 0.0012926403672034314, 'lstm_units': 32, 'dropout_rate': 0.1963511904573297, 'batch_size': 32}
+Epoch 1/15
+2170/2170 - 41s - loss: 0.0788 - mae: 0.0788 - val_loss: 0.0484 - val_mae: 0.0484 - 41s/epoch - 19ms/step
+Epoch 2/15
+2170/2170 - 41s - loss: 0.0471 - mae: 0.0471 - val_loss: 0.0481 - val_mae: 0.0481 - 41s/epoch - 19ms/step
+Epoch 3/15
+2170/2170 - 40s - loss: 0.0465 - mae: 0.0465 - val_loss: 0.0587 - val_mae: 0.0587 - 40s/epoch - 19ms/step
+Epoch 4/15
+2170/2170 - 39s - loss: 0.0461 - mae: 0.0461 - val_loss: 0.0410 - val_mae: 0.0410 - 39s/epoch - 18ms/step
+Epoch 5/15
+2170/2170 - 39s - loss: 0.0441 - mae: 0.0441 - val_loss: 0.0415 - val_mae: 0.0415 - 39s/epoch - 18ms/step
+Epoch 6/15
+2170/2170 - 39s - loss: 0.0434 - mae: 0.0434 - val_loss: 0.0406 - val_mae: 0.0406 - 39s/epoch - 18ms/step
+Epoch 7/15
+2170/2170 - 39s - loss: 0.0428 - mae: 0.0428 - val_loss: 0.0504 - val_mae: 0.0504 - 39s/epoch - 18ms/step
+Epoch 8/15
+2170/2170 - 40s - loss: 0.0431 - mae: 0.0431 - val_loss: 0.0371 - val_mae: 0.0371 - 40s/epoch - 18ms/step
+Epoch 9/15
+2170/2170 - 39s - loss: 0.0421 - mae: 0.0421 - val_loss: 0.0405 - val_mae: 0.0405 - 39s/epoch - 18ms/step
+Epoch 10/15
+2170/2170 - 38s - loss: 0.0430 - mae: 0.0430 - val_loss: 0.0513 - val_mae: 0.0513 - 38s/epoch - 18ms/step
+Epoch 11/15
+2170/2170 - 38s - loss: 0.0425 - mae: 0.0425 - val_loss: 0.0441 - val_mae: 0.0441 - 38s/epoch - 18ms/step
+Trial 1: Completed with best val_mae: 0.037117
+
+Trial 2: Starting with params: {'learning_rate': 0.00011090188066169212, 'lstm_units': 32, 'dropout_rate': 0.16946589724692984, 'batch_size': 32}
+Epoch 1/15
+2170/2170 - 41s - loss: 0.1794 - mae: 0.1794 - val_loss: 0.0837 - val_mae: 0.0837 - 41s/epoch - 19ms/step
+Epoch 2/15
+2170/2170 - 38s - loss: 0.0921 - mae: 0.0921 - val_loss: 0.0666 - val_mae: 0.0666 - 38s/epoch - 18ms/step
+Epoch 3/15
+2170/2170 - 42s - loss: 0.0723 - mae: 0.0723 - val_loss: 0.0542 - val_mae: 0.0542 - 42s/epoch - 19ms/step
+Epoch 4/15
+2170/2170 - 45s - loss: 0.0622 - mae: 0.0622 - val_loss: 0.0507 - val_mae: 0.0507 - 45s/epoch - 21ms/step
+Epoch 5/15
+2170/2170 - 45s - loss: 0.0570 - mae: 0.0570 - val_loss: 0.0483 - val_mae: 0.0483 - 45s/epoch - 21ms/step
+Epoch 6/15
+2170/2170 - 45s - loss: 0.0536 - mae: 0.0536 - val_loss: 0.0474 - val_mae: 0.0474 - 45s/epoch - 21ms/step
+Epoch 7/15
+2170/2170 - 45s - loss: 0.0510 - mae: 0.0510 - val_loss: 0.0473 - val_mae: 0.0473 - 45s/epoch - 21ms/step
+Epoch 8/15
+2170/2170 - 42s - loss: 0.0490 - mae: 0.0490 - val_loss: 0.0465 - val_mae: 0.0465 - 42s/epoch - 19ms/step
+Epoch 9/15
+2170/2170 - 41s - loss: 0.0474 - mae: 0.0474 - val_loss: 0.0436 - val_mae: 0.0436 - 41s/epoch - 19ms/step
+Epoch 10/15
+2170/2170 - 41s - loss: 0.0461 - mae: 0.0461 - val_loss: 0.0460 - val_mae: 0.0460 - 41s/epoch - 19ms/step
+Epoch 11/15
+2170/2170 - 41s - loss: 0.0449 - mae: 0.0449 - val_loss: 0.0442 - val_mae: 0.0442 - 41s/epoch - 19ms/step
+Epoch 12/15
+2170/2170 - 41s - loss: 0.0441 - mae: 0.0441 - val_loss: 0.0427 - val_mae: 0.0427 - 41s/epoch - 19ms/step
+Epoch 13/15
+2170/2170 - 41s - loss: 0.0435 - mae: 0.0435 - val_loss: 0.0462 - val_mae: 0.0462 - 41s/epoch - 19ms/step
+Epoch 14/15
+2170/2170 - 41s - loss: 0.0429 - mae: 0.0429 - val_loss: 0.0424 - val_mae: 0.0424 - 41s/epoch - 19ms/step
+Epoch 15/15
+2170/2170 - 41s - loss: 0.0425 - mae: 0.0425 - val_loss: 0.0425 - val_mae: 0.0425 - 41s/epoch - 19ms/step
+Trial 2: Completed with best val_mae: 0.042398
+
+Trial 3: Starting with params: {'learning_rate': 0.003828568989422191, 'lstm_units': 32, 'dropout_rate': 0.2578758540816227, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 82s - loss: 0.0648 - mae: 0.0648 - val_loss: 0.0458 - val_mae: 0.0458 - 82s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 81s - loss: 0.0529 - mae: 0.0529 - val_loss: 0.0440 - val_mae: 0.0440 - 81s/epoch - 19ms/step
+Epoch 3/15
+4339/4339 - 91s - loss: 0.0509 - mae: 0.0509 - val_loss: 0.0427 - val_mae: 0.0427 - 91s/epoch - 21ms/step
+Epoch 4/15
+4339/4339 - 92s - loss: 0.0497 - mae: 0.0497 - val_loss: 0.0443 - val_mae: 0.0443 - 92s/epoch - 21ms/step
+Epoch 5/15
+4339/4339 - 82s - loss: 0.0490 - mae: 0.0490 - val_loss: 0.0419 - val_mae: 0.0419 - 82s/epoch - 19ms/step
+Epoch 6/15
+4339/4339 - 80s - loss: 0.0487 - mae: 0.0487 - val_loss: 0.0384 - val_mae: 0.0384 - 80s/epoch - 19ms/step
+Epoch 7/15
+4339/4339 - 79s - loss: 0.0490 - mae: 0.0490 - val_loss: 0.0389 - val_mae: 0.0389 - 79s/epoch - 18ms/step
+Epoch 8/15
+4339/4339 - 76s - loss: 0.0487 - mae: 0.0487 - val_loss: 0.0381 - val_mae: 0.0381 - 76s/epoch - 17ms/step
+Epoch 9/15
+4339/4339 - 81s - loss: 0.0479 - mae: 0.0479 - val_loss: 0.0436 - val_mae: 0.0436 - 81s/epoch - 19ms/step
+Epoch 10/15
+4339/4339 - 77s - loss: 0.0478 - mae: 0.0478 - val_loss: 0.0430 - val_mae: 0.0430 - 77s/epoch - 18ms/step
+Epoch 11/15
+4339/4339 - 77s - loss: 0.0474 - mae: 0.0474 - val_loss: 0.0486 - val_mae: 0.0486 - 77s/epoch - 18ms/step
+Trial 3: Completed with best val_mae: 0.038110
+
+Trial 4: Starting with params: {'learning_rate': 0.002835989644507184, 'lstm_units': 32, 'dropout_rate': 0.27801122136312967, 'batch_size': 32}
+Epoch 1/15
+2170/2170 - 41s - loss: 0.0715 - mae: 0.0715 - val_loss: 0.0425 - val_mae: 0.0425 - 41s/epoch - 19ms/step
+Epoch 2/15
+2170/2170 - 38s - loss: 0.0529 - mae: 0.0529 - val_loss: 0.0412 - val_mae: 0.0412 - 38s/epoch - 18ms/step
+Epoch 3/15
+2170/2170 - 38s - loss: 0.0537 - mae: 0.0537 - val_loss: 0.0383 - val_mae: 0.0383 - 38s/epoch - 18ms/step
+Epoch 4/15
+2170/2170 - 39s - loss: 0.0511 - mae: 0.0511 - val_loss: 0.0395 - val_mae: 0.0395 - 39s/epoch - 18ms/step
+Epoch 5/15
+2170/2170 - 38s - loss: 0.0503 - mae: 0.0503 - val_loss: 0.0418 - val_mae: 0.0418 - 38s/epoch - 18ms/step
+Epoch 6/15
+2170/2170 - 38s - loss: 0.0499 - mae: 0.0499 - val_loss: 0.0387 - val_mae: 0.0387 - 38s/epoch - 18ms/step
+Trial 4: Completed with best val_mae: 0.038301
+
+Trial 5: Starting with params: {'learning_rate': 0.00018748079140749999, 'lstm_units': 48, 'dropout_rate': 0.2577657284451523, 'batch_size': 32}
+Epoch 1/15
+2170/2170 - 41s - loss: 0.1419 - mae: 0.1419 - val_loss: 0.0692 - val_mae: 0.0692 - 41s/epoch - 19ms/step
+Epoch 2/15
+2170/2170 - 39s - loss: 0.0754 - mae: 0.0754 - val_loss: 0.0498 - val_mae: 0.0498 - 39s/epoch - 18ms/step
+Epoch 3/15
+
+Trial 6: Starting with params: {'learning_rate': 0.004865749643628876, 'lstm_units': 32, 'dropout_rate': 0.39566148144582003, 'batch_size': 32}
+Epoch 1/15
+2170/2170 - 41s - loss: 0.0780 - mae: 0.0780 - val_loss: 0.0497 - val_mae: 0.0497 - 41s/epoch - 19ms/step
+Epoch 2/15
+2170/2170 - 39s - loss: 0.0637 - mae: 0.0637 - val_loss: 0.0434 - val_mae: 0.0434 - 39s/epoch - 18ms/step
+Epoch 3/15
+
+Trial 7: Starting with params: {'learning_rate': 0.004978019621785853, 'lstm_units': 32, 'dropout_rate': 0.3776925050613664, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 80s - loss: 0.0734 - mae: 0.0734 - val_loss: 0.0459 - val_mae: 0.0459 - 80s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 79s - loss: 0.0624 - mae: 0.0624 - val_loss: 0.0478 - val_mae: 0.0478 - 79s/epoch - 18ms/step
+Epoch 3/15
+4339/4339 - 79s - loss: 0.0611 - mae: 0.0611 - val_loss: 0.0421 - val_mae: 0.0421 - 79s/epoch - 18ms/step
+Epoch 4/15
+4339/4339 - 78s - loss: 0.0602 - mae: 0.0602 - val_loss: 0.0447 - val_mae: 0.0447 - 78s/epoch - 18ms/step
+Epoch 5/15
+
+Trial 8: Starting with params: {'learning_rate': 0.0030347847568201495, 'lstm_units': 48, 'dropout_rate': 0.25654766131150564, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 79s - loss: 0.0605 - mae: 0.0605 - val_loss: 0.0430 - val_mae: 0.0430 - 79s/epoch - 18ms/step
+Epoch 2/15
+4339/4339 - 77s - loss: 0.0477 - mae: 0.0477 - val_loss: 0.0407 - val_mae: 0.0407 - 77s/epoch - 18ms/step
+Epoch 3/15
+4339/4339 - 79s - loss: 0.0454 - mae: 0.0454 - val_loss: 0.0498 - val_mae: 0.0498 - 79s/epoch - 18ms/step
+Epoch 4/15
+4339/4339 - 79s - loss: 0.0444 - mae: 0.0444 - val_loss: 0.0356 - val_mae: 0.0356 - 79s/epoch - 18ms/step
+Epoch 5/15
+4339/4339 - 78s - loss: 0.0440 - mae: 0.0440 - val_loss: 0.0403 - val_mae: 0.0403 - 78s/epoch - 18ms/step
+Epoch 6/15
+4339/4339 - 80s - loss: 0.0432 - mae: 0.0432 - val_loss: 0.0428 - val_mae: 0.0428 - 80s/epoch - 18ms/step
+Epoch 7/15
+4339/4339 - 80s - loss: 0.0435 - mae: 0.0435 - val_loss: 0.0374 - val_mae: 0.0374 - 80s/epoch - 18ms/step
+Trial 8: Completed with best val_mae: 0.035635
+
+Trial 9: Starting with params: {'learning_rate': 0.00013978358928802011, 'lstm_units': 48, 'dropout_rate': 0.12943132867080118, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 80s - loss: 0.1096 - mae: 0.1096 - val_loss: 0.0569 - val_mae: 0.0569 - 80s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 77s - loss: 0.0570 - mae: 0.0570 - val_loss: 0.0458 - val_mae: 0.0458 - 77s/epoch - 18ms/step
+Epoch 3/15
+4339/4339 - 79s - loss: 0.0482 - mae: 0.0482 - val_loss: 0.0459 - val_mae: 0.0459 - 79s/epoch - 18ms/step
+Epoch 4/15
+
+Trial 10: Starting with params: {'learning_rate': 0.0004441442456860875, 'lstm_units': 16, 'dropout_rate': 0.11027131374084123, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 81s - loss: 0.1016 - mae: 0.1016 - val_loss: 0.0518 - val_mae: 0.0518 - 81s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 76s - loss: 0.0553 - mae: 0.0553 - val_loss: 0.0501 - val_mae: 0.0501 - 76s/epoch - 18ms/step
+Epoch 3/15
+
+Trial 11: Starting with params: {'learning_rate': 0.0013987429584285057, 'lstm_units': 48, 'dropout_rate': 0.19844889289145318, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 83s - loss: 0.0622 - mae: 0.0622 - val_loss: 0.0481 - val_mae: 0.0481 - 83s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 80s - loss: 0.0433 - mae: 0.0433 - val_loss: 0.0408 - val_mae: 0.0408 - 80s/epoch - 18ms/step
+Epoch 3/15
+4339/4339 - 79s - loss: 0.0415 - mae: 0.0415 - val_loss: 0.0386 - val_mae: 0.0386 - 79s/epoch - 18ms/step
+Epoch 4/15
+4339/4339 - 81s - loss: 0.0397 - mae: 0.0397 - val_loss: 0.0413 - val_mae: 0.0413 - 81s/epoch - 19ms/step
+Epoch 5/15
+4339/4339 - 80s - loss: 0.0390 - mae: 0.0390 - val_loss: 0.0375 - val_mae: 0.0375 - 80s/epoch - 18ms/step
+Epoch 6/15
+4339/4339 - 81s - loss: 0.0382 - mae: 0.0382 - val_loss: 0.0423 - val_mae: 0.0423 - 81s/epoch - 19ms/step
+Epoch 7/15
+4339/4339 - 77s - loss: 0.0383 - mae: 0.0383 - val_loss: 0.0425 - val_mae: 0.0425 - 77s/epoch - 18ms/step
+Epoch 8/15
+4339/4339 - 79s - loss: 0.0376 - mae: 0.0376 - val_loss: 0.0378 - val_mae: 0.0378 - 79s/epoch - 18ms/step
+Trial 11: Completed with best val_mae: 0.037497
+
+Trial 12: Starting with params: {'learning_rate': 0.0017954581797147277, 'lstm_units': 48, 'dropout_rate': 0.31309621363669715, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 79s - loss: 0.0658 - mae: 0.0658 - val_loss: 0.0411 - val_mae: 0.0411 - 79s/epoch - 18ms/step
+Epoch 2/15
+4339/4339 - 79s - loss: 0.0514 - mae: 0.0514 - val_loss: 0.0422 - val_mae: 0.0422 - 79s/epoch - 18ms/step
+Epoch 3/15
+4339/4339 - 79s - loss: 0.0481 - mae: 0.0481 - val_loss: 0.0374 - val_mae: 0.0374 - 79s/epoch - 18ms/step
+Epoch 4/15
+4339/4339 - 77s - loss: 0.0483 - mae: 0.0483 - val_loss: 0.0388 - val_mae: 0.0388 - 77s/epoch - 18ms/step
+Epoch 5/15
+4339/4339 - 81s - loss: 0.0469 - mae: 0.0469 - val_loss: 0.0419 - val_mae: 0.0419 - 81s/epoch - 19ms/step
+Epoch 6/15
+4339/4339 - 79s - loss: 0.0464 - mae: 0.0464 - val_loss: 0.0400 - val_mae: 0.0400 - 79s/epoch - 18ms/step
+Trial 12: Completed with best val_mae: 0.037377
+
+Trial 13: Starting with params: {'learning_rate': 0.0006830342956700621, 'lstm_units': 48, 'dropout_rate': 0.3296963328109925, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 80s - loss: 0.0816 - mae: 0.0816 - val_loss: 0.0428 - val_mae: 0.0428 - 80s/epoch - 18ms/step
+Epoch 2/15
+4339/4339 - 79s - loss: 0.0513 - mae: 0.0513 - val_loss: 0.0423 - val_mae: 0.0423 - 79s/epoch - 18ms/step
+Epoch 3/15
+
+Trial 14: Starting with params: {'learning_rate': 0.002157270246013706, 'lstm_units': 16, 'dropout_rate': 0.2126203415721442, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 81s - loss: 0.0745 - mae: 0.0745 - val_loss: 0.0454 - val_mae: 0.0454 - 81s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 78s - loss: 0.0577 - mae: 0.0577 - val_loss: 0.0429 - val_mae: 0.0429 - 78s/epoch - 18ms/step
+Epoch 3/15
+
+Trial 15: Starting with params: {'learning_rate': 0.00088633582449202, 'lstm_units': 48, 'dropout_rate': 0.1572721153508268, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 83s - loss: 0.0656 - mae: 0.0656 - val_loss: 0.0422 - val_mae: 0.0422 - 83s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 80s - loss: 0.0412 - mae: 0.0412 - val_loss: 0.0393 - val_mae: 0.0393 - 80s/epoch - 18ms/step
+Epoch 3/15
+4339/4339 - 79s - loss: 0.0398 - mae: 0.0398 - val_loss: 0.0372 - val_mae: 0.0372 - 79s/epoch - 18ms/step
+Epoch 4/15
+4339/4339 - 80s - loss: 0.0375 - mae: 0.0375 - val_loss: 0.0358 - val_mae: 0.0358 - 80s/epoch - 18ms/step
+Epoch 5/15
+4339/4339 - 80s - loss: 0.0367 - mae: 0.0367 - val_loss: 0.0364 - val_mae: 0.0364 - 80s/epoch - 18ms/step
+Epoch 6/15
+4339/4339 - 80s - loss: 0.0377 - mae: 0.0377 - val_loss: 0.0379 - val_mae: 0.0379 - 80s/epoch - 18ms/step
+Epoch 7/15
+4339/4339 - 81s - loss: 0.0355 - mae: 0.0355 - val_loss: 0.0317 - val_mae: 0.0317 - 81s/epoch - 19ms/step
+Epoch 8/15
+4339/4339 - 82s - loss: 0.0349 - mae: 0.0349 - val_loss: 0.0345 - val_mae: 0.0345 - 82s/epoch - 19ms/step
+Epoch 9/15
+4339/4339 - 83s - loss: 0.0343 - mae: 0.0343 - val_loss: 0.0358 - val_mae: 0.0358 - 83s/epoch - 19ms/step
+Epoch 10/15
+4339/4339 - 82s - loss: 0.0342 - mae: 0.0342 - val_loss: 0.0326 - val_mae: 0.0326 - 82s/epoch - 19ms/step
+Trial 15: Completed with best val_mae: 0.031662
+
+Trial 16: Starting with params: {'learning_rate': 0.0008104708595612642, 'lstm_units': 48, 'dropout_rate': 0.1613400635259187, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 85s - loss: 0.0663 - mae: 0.0663 - val_loss: 0.0393 - val_mae: 0.0393 - 85s/epoch - 20ms/step
+Epoch 2/15
+4339/4339 - 82s - loss: 0.0419 - mae: 0.0419 - val_loss: 0.0401 - val_mae: 0.0401 - 82s/epoch - 19ms/step
+Epoch 3/15
+4339/4339 - 78s - loss: 0.0382 - mae: 0.0382 - val_loss: 0.0345 - val_mae: 0.0345 - 78s/epoch - 18ms/step
+Epoch 4/15
+4339/4339 - 84s - loss: 0.0378 - mae: 0.0378 - val_loss: 0.0372 - val_mae: 0.0372 - 84s/epoch - 19ms/step
+Epoch 5/15
+4339/4339 - 82s - loss: 0.0363 - mae: 0.0363 - val_loss: 0.0349 - val_mae: 0.0349 - 82s/epoch - 19ms/step
+Epoch 6/15
+4339/4339 - 83s - loss: 0.0358 - mae: 0.0358 - val_loss: 0.0363 - val_mae: 0.0363 - 83s/epoch - 19ms/step
+Trial 16: Completed with best val_mae: 0.034493
+
+Trial 17: Starting with params: {'learning_rate': 0.0004448666173247164, 'lstm_units': 48, 'dropout_rate': 0.1431427100107204, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 84s - loss: 0.0764 - mae: 0.0764 - val_loss: 0.0443 - val_mae: 0.0443 - 84s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 82s - loss: 0.0448 - mae: 0.0448 - val_loss: 0.0475 - val_mae: 0.0475 - 82s/epoch - 19ms/step
+Epoch 3/15
+4339/4339 - 82s - loss: 0.0395 - mae: 0.0395 - val_loss: 0.0382 - val_mae: 0.0382 - 82s/epoch - 19ms/step
+Epoch 4/15
+4339/4339 - 82s - loss: 0.0368 - mae: 0.0368 - val_loss: 0.0345 - val_mae: 0.0345 - 82s/epoch - 19ms/step
+Epoch 5/15
+4339/4339 - 85s - loss: 0.0355 - mae: 0.0355 - val_loss: 0.0398 - val_mae: 0.0398 - 85s/epoch - 20ms/step
+Epoch 6/15
+4339/4339 - 82s - loss: 0.0351 - mae: 0.0351 - val_loss: 0.0323 - val_mae: 0.0323 - 82s/epoch - 19ms/step
+Epoch 7/15
+4339/4339 - 83s - loss: 0.0344 - mae: 0.0344 - val_loss: 0.0413 - val_mae: 0.0413 - 83s/epoch - 19ms/step
+Epoch 8/15
+4339/4339 - 85s - loss: 0.0338 - mae: 0.0338 - val_loss: 0.0371 - val_mae: 0.0371 - 85s/epoch - 20ms/step
+Epoch 9/15
+4339/4339 - 84s - loss: 0.0345 - mae: 0.0345 - val_loss: 0.0434 - val_mae: 0.0434 - 84s/epoch - 19ms/step
+Trial 17: Completed with best val_mae: 0.032334
+
+Trial 18: Starting with params: {'learning_rate': 0.0009950248469325843, 'lstm_units': 16, 'dropout_rate': 0.10458499384313971, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 83s - loss: 0.0781 - mae: 0.0781 - val_loss: 0.0479 - val_mae: 0.0479 - 83s/epoch - 19ms/step
+Epoch 2/15
+4339/4339 - 82s - loss: 0.0485 - mae: 0.0485 - val_loss: 0.0404 - val_mae: 0.0404 - 82s/epoch - 19ms/step
+Epoch 3/15
+
+Trial 19: Starting with params: {'learning_rate': 0.000445978218588877, 'lstm_units': 48, 'dropout_rate': 0.2204400540555787, 'batch_size': 16}
+Epoch 1/15
+4339/4339 - 85s - loss: 0.0833 - mae: 0.0833 - val_loss: 0.0492 - val_mae: 0.0492 - 85s/epoch - 20ms/step
+Epoch 2/15
+4339/4339 - 81s - loss: 0.0488 - mae: 0.0488 - val_loss: 0.0402 - val_mae: 0.0402 - 81s/epoch - 19ms/step
+Epoch 3/15
+4339/4339 - 82s - loss: 0.0433 - mae: 0.0433 - val_loss: 0.0382 - val_mae: 0.0382 - 82s/epoch - 19ms/step
+Epoch 4/15
+4339/4339 - 83s - loss: 0.0416 - mae: 0.0416 - val_loss: 0.0353 - val_mae: 0.0353 - 83s/epoch - 19ms/step
+Epoch 5/15
+4339/4339 - 79s - loss: 0.0406 - mae: 0.0406 - val_loss: 0.0375 - val_mae: 0.0375 - 79s/epoch - 18ms/step
+Epoch 6/15
+4339/4339 - 81s - loss: 0.0400 - mae: 0.0400 - val_loss: 0.0399 - val_mae: 0.0399 - 81s/epoch - 19ms/step
+Epoch 7/15
+4339/4339 - 81s - loss: 0.0394 - mae: 0.0394 - val_loss: 0.0365 - val_mae: 0.0365 - 81s/epoch - 19ms/step
+Trial 19: Completed with best val_mae: 0.035272
+
+--- Hyperparameter Optimization Finished for HORIZON: SHORT ---
+Number of finished trials for short: 20
+Best trial for LSTM short:
+  Value (min val_mae_scaled): 0.031662
+  Best Parameters:
+    learning_rate: 0.00088633582449202
+    lstm_units: 48
+    dropout_rate: 0.1572721153508268
+    batch_size: 16
+
+==================== Starting HPO for HORIZON: MEDIUM ====================
+Base configuration loaded for medium: {'input_window': 1344, 'output_horizon': 672, 'min_input_window': 96, 'target_column': 'actual_load', 'train_split': 0.8, 'val_split': 0.1, 'num_workers': 2, 'run_tag': 'baseline_final_lstm_medium', 'early_stopping_patience': 2, 'epochs': 7, 'batch_size': 32, 'epochs_hpo': 15, 'early_stopping_patience_hpo': 3, 'hpo_pruner_warmup': 2, 'learning_rate': 0.001, 'lags': [1, 96, 672, 1344], 'feature_scaler': 'MinMax', 'target_scaler': 'MinMax', 'lstm_units': 32, 'dropout_rate': 0.1, 'loss_function': 'mae', 'exogenous_features': ['hour_sin', 'hour_cos', 'weekday_sin', 'weekday_cos', 'month_sin', 'month_cos', 'is_daylight', 'year', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation'], 'run_tag_tft': 'baseline_final_tft_medium', 'hidden_size': 16, 'attention_head_size': 1, 'dropout': 0.1, 'gradient_clip_val': 0.1, 'exogenous_features_tft': ['hour', 'is_daylight', 'month', 'year', 'weekday', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']}
+Attempting to add exogenous features: ['hour_sin', 'hour_cos', 'weekday_sin', 'weekday_cos', 'month_sin', 'month_cos', 'is_daylight', 'year', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']
+--- The Test Set Start Date is: 2019-07-02 21:15:00+00:00 ---
+LSTM data splits (after lag drop): Train 139058, Val 17382, Test 17383
+Total number of input features for LSTM (X): 23
+Data prepared for medium: X_train shape (137043, 1344, 23), X_val shape (15367, 1344, 23)
+Using a 50.0% subset of training data for HPO. New shape: (68522, 1344, 23)
+Starting Optuna optimization for medium horizon with 20 trials...
+
+Trial 0: Starting with params: {'learning_rate': 0.0010854937815084566, 'lstm_units': 48, 'dropout_rate': 0.36902577136457215, 'batch_size': 32}
+Epoch 1/15
+2142/2142 - 78s - loss: 0.1080 - mae: 0.1080 - val_loss: 0.0651 - val_mae: 0.0651 - 78s/epoch - 36ms/step
+Epoch 2/15
+2142/2142 - 72s - loss: 0.0765 - mae: 0.0765 - val_loss: 0.0605 - val_mae: 0.0605 - 72s/epoch - 34ms/step
+Epoch 3/15
+2142/2142 - 72s - loss: 0.0739 - mae: 0.0739 - val_loss: 0.0577 - val_mae: 0.0577 - 72s/epoch - 33ms/step
+Epoch 4/15
+2142/2142 - 70s - loss: 0.0727 - mae: 0.0727 - val_loss: 0.0580 - val_mae: 0.0580 - 70s/epoch - 33ms/step
+Epoch 5/15
+2142/2142 - 70s - loss: 0.0719 - mae: 0.0719 - val_loss: 0.0583 - val_mae: 0.0583 - 70s/epoch - 33ms/step
+Epoch 6/15
+2142/2142 - 72s - loss: 0.0721 - mae: 0.0721 - val_loss: 0.0584 - val_mae: 0.0584 - 72s/epoch - 34ms/step
+Trial 0: Completed with best val_mae: 0.057702
+
+Trial 1: Starting with params: {'learning_rate': 0.0002648221087307349, 'lstm_units': 16, 'dropout_rate': 0.20093713525818252, 'batch_size': 32}
+Epoch 1/15
+2142/2142 - 73s - loss: 0.1762 - mae: 0.1762 - val_loss: 0.1022 - val_mae: 0.1022 - 73s/epoch - 34ms/step
+Epoch 2/15
+2142/2142 - 72s - loss: 0.1124 - mae: 0.1124 - val_loss: 0.0861 - val_mae: 0.0861 - 72s/epoch - 34ms/step
+Epoch 3/15
+2142/2142 - 71s - loss: 0.0997 - mae: 0.0997 - val_loss: 0.0814 - val_mae: 0.0814 - 71s/epoch - 33ms/step
+Epoch 4/15
+2142/2142 - 73s - loss: 0.0912 - mae: 0.0912 - val_loss: 0.0771 - val_mae: 0.0771 - 73s/epoch - 34ms/step
+Epoch 5/15
+2142/2142 - 71s - loss: 0.0859 - mae: 0.0859 - val_loss: 0.0743 - val_mae: 0.0743 - 71s/epoch - 33ms/step
+Epoch 6/15
+2142/2142 - 70s - loss: 0.0821 - mae: 0.0821 - val_loss: 0.0701 - val_mae: 0.0701 - 70s/epoch - 33ms/step
+Epoch 7/15
+2142/2142 - 73s - loss: 0.0804 - mae: 0.0804 - val_loss: 0.0697 - val_mae: 0.0697 - 73s/epoch - 34ms/step
+Epoch 8/15
+2142/2142 - 73s - loss: 0.0793 - mae: 0.0793 - val_loss: 0.0690 - val_mae: 0.0690 - 73s/epoch - 34ms/step
+Epoch 9/15
+2142/2142 - 74s - loss: 0.0788 - mae: 0.0788 - val_loss: 0.0693 - val_mae: 0.0693 - 74s/epoch - 34ms/step
+Epoch 10/15
+2142/2142 - 73s - loss: 0.0781 - mae: 0.0781 - val_loss: 0.0698 - val_mae: 0.0698 - 73s/epoch - 34ms/step
+Epoch 11/15
+2142/2142 - 73s - loss: 0.0776 - mae: 0.0776 - val_loss: 0.0690 - val_mae: 0.0690 - 73s/epoch - 34ms/step
+Trial 1: Completed with best val_mae: 0.068950
+
+Trial 2: Starting with params: {'learning_rate': 0.001277516735269726, 'lstm_units': 48, 'dropout_rate': 0.3560232557321158, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 148s - loss: 0.0938 - mae: 0.0938 - val_loss: 0.0632 - val_mae: 0.0632 - 148s/epoch - 35ms/step
+Epoch 2/15
+4283/4283 - 142s - loss: 0.0733 - mae: 0.0733 - val_loss: 0.0586 - val_mae: 0.0586 - 142s/epoch - 33ms/step
+Epoch 3/15
+4283/4283 - 140s - loss: 0.0714 - mae: 0.0714 - val_loss: 0.0573 - val_mae: 0.0573 - 140s/epoch - 33ms/step
+Epoch 4/15
+4283/4283 - 141s - loss: 0.0707 - mae: 0.0707 - val_loss: 0.0581 - val_mae: 0.0581 - 141s/epoch - 33ms/step
+Epoch 5/15
+4283/4283 - 145s - loss: 0.0705 - mae: 0.0705 - val_loss: 0.0558 - val_mae: 0.0558 - 145s/epoch - 34ms/step
+Epoch 6/15
+4283/4283 - 145s - loss: 0.0696 - mae: 0.0696 - val_loss: 0.0590 - val_mae: 0.0590 - 145s/epoch - 34ms/step
+Epoch 7/15
+4283/4283 - 147s - loss: 0.0724 - mae: 0.0724 - val_loss: 0.0586 - val_mae: 0.0586 - 147s/epoch - 34ms/step
+Epoch 8/15
+4283/4283 - 148s - loss: 0.0692 - mae: 0.0692 - val_loss: 0.0632 - val_mae: 0.0632 - 148s/epoch - 34ms/step
+Trial 2: Completed with best val_mae: 0.055819
+
+Trial 3: Starting with params: {'learning_rate': 0.003354908616922129, 'lstm_units': 16, 'dropout_rate': 0.11895960690281832, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 158s - loss: 0.0868 - mae: 0.0868 - val_loss: 0.0626 - val_mae: 0.0626 - 158s/epoch - 37ms/step
+Epoch 2/15
+4283/4283 - 140s - loss: 0.0691 - mae: 0.0691 - val_loss: 0.0629 - val_mae: 0.0629 - 140s/epoch - 33ms/step
+Epoch 3/15
+4283/4283 - 140s - loss: 0.0676 - mae: 0.0676 - val_loss: 0.0608 - val_mae: 0.0608 - 140s/epoch - 33ms/step
+Epoch 4/15
+4283/4283 - 139s - loss: 0.0668 - mae: 0.0668 - val_loss: 0.0607 - val_mae: 0.0607 - 139s/epoch - 33ms/step
+Epoch 5/15
+4283/4283 - 140s - loss: 0.0663 - mae: 0.0663 - val_loss: 0.0583 - val_mae: 0.0583 - 140s/epoch - 33ms/step
+Epoch 6/15
+4283/4283 - 138s - loss: 0.0659 - mae: 0.0659 - val_loss: 0.0611 - val_mae: 0.0611 - 138s/epoch - 32ms/step
+Epoch 7/15
+4283/4283 - 139s - loss: 0.0652 - mae: 0.0652 - val_loss: 0.0603 - val_mae: 0.0603 - 139s/epoch - 32ms/step
+Epoch 8/15
+4283/4283 - 144s - loss: 0.0652 - mae: 0.0652 - val_loss: 0.0620 - val_mae: 0.0620 - 144s/epoch - 34ms/step
+Trial 3: Completed with best val_mae: 0.058292
+
+Trial 4: Starting with params: {'learning_rate': 0.0021210095071751843, 'lstm_units': 16, 'dropout_rate': 0.30342035167955117, 'batch_size': 32}
+Epoch 1/15
+2142/2142 - 74s - loss: 0.1210 - mae: 0.1210 - val_loss: 0.0804 - val_mae: 0.0804 - 74s/epoch - 35ms/step
+Epoch 2/15
+2142/2142 - 72s - loss: 0.0909 - mae: 0.0909 - val_loss: 0.0746 - val_mae: 0.0746 - 72s/epoch - 34ms/step
+Epoch 3/15
+2142/2142 - 73s - loss: 0.0893 - mae: 0.0893 - val_loss: 0.0703 - val_mae: 0.0703 - 73s/epoch - 34ms/step
+Epoch 4/15
+2142/2142 - 73s - loss: 0.0885 - mae: 0.0885 - val_loss: 0.0738 - val_mae: 0.0738 - 73s/epoch - 34ms/step
+Epoch 5/15
+2142/2142 - 72s - loss: 0.0882 - mae: 0.0882 - val_loss: 0.0726 - val_mae: 0.0726 - 72s/epoch - 34ms/step
+Epoch 6/15
+2142/2142 - 71s - loss: 0.0881 - mae: 0.0881 - val_loss: 0.0757 - val_mae: 0.0757 - 71s/epoch - 33ms/step
+Trial 4: Completed with best val_mae: 0.070345
+
+Trial 5: Starting with params: {'learning_rate': 0.004816528804123184, 'lstm_units': 16, 'dropout_rate': 0.2955001641954882, 'batch_size': 32}
+Epoch 1/15
+2142/2142 - 73s - loss: 0.1100 - mae: 0.1100 - val_loss: 0.0742 - val_mae: 0.0742 - 73s/epoch - 34ms/step
+Epoch 2/15
+2142/2142 - 70s - loss: 0.0909 - mae: 0.0909 - val_loss: 0.0763 - val_mae: 0.0763 - 70s/epoch - 33ms/step
+Epoch 3/15
+
+Trial 6: Starting with params: {'learning_rate': 0.0003005491443042918, 'lstm_units': 32, 'dropout_rate': 0.15849437692505883, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 140s - loss: 0.1173 - mae: 0.1173 - val_loss: 0.0707 - val_mae: 0.0707 - 140s/epoch - 33ms/step
+Epoch 2/15
+4283/4283 - 137s - loss: 0.0799 - mae: 0.0799 - val_loss: 0.0625 - val_mae: 0.0625 - 137s/epoch - 32ms/step
+Epoch 3/15
+4283/4283 - 137s - loss: 0.0707 - mae: 0.0707 - val_loss: 0.0562 - val_mae: 0.0562 - 137s/epoch - 32ms/step
+Epoch 4/15
+4283/4283 - 138s - loss: 0.0647 - mae: 0.0647 - val_loss: 0.0558 - val_mae: 0.0558 - 138s/epoch - 32ms/step
+Epoch 5/15
+4283/4283 - 136s - loss: 0.0619 - mae: 0.0619 - val_loss: 0.0543 - val_mae: 0.0543 - 136s/epoch - 32ms/step
+Epoch 6/15
+4283/4283 - 136s - loss: 0.0604 - mae: 0.0604 - val_loss: 0.0537 - val_mae: 0.0537 - 136s/epoch - 32ms/step
+Epoch 7/15
+4283/4283 - 136s - loss: 0.0608 - mae: 0.0608 - val_loss: 0.0542 - val_mae: 0.0542 - 136s/epoch - 32ms/step
+Epoch 8/15
+4283/4283 - 136s - loss: 0.0595 - mae: 0.0595 - val_loss: 0.0528 - val_mae: 0.0528 - 136s/epoch - 32ms/step
+Epoch 9/15
+4283/4283 - 138s - loss: 0.0586 - mae: 0.0586 - val_loss: 0.0526 - val_mae: 0.0526 - 138s/epoch - 32ms/step
+Epoch 10/15
+4283/4283 - 141s - loss: 0.0583 - mae: 0.0583 - val_loss: 0.0538 - val_mae: 0.0538 - 141s/epoch - 33ms/step
+Epoch 11/15
+4283/4283 - 141s - loss: 0.0575 - mae: 0.0575 - val_loss: 0.0534 - val_mae: 0.0534 - 141s/epoch - 33ms/step
+Epoch 12/15
+4283/4283 - 139s - loss: 0.0577 - mae: 0.0577 - val_loss: 0.0642 - val_mae: 0.0642 - 139s/epoch - 32ms/step
+Trial 6: Completed with best val_mae: 0.052588
+
+Trial 7: Starting with params: {'learning_rate': 0.0031199255485687646, 'lstm_units': 16, 'dropout_rate': 0.1845928734519765, 'batch_size': 32}
+Epoch 1/15
+2142/2142 - 73s - loss: 0.1056 - mae: 0.1056 - val_loss: 0.0689 - val_mae: 0.0689 - 73s/epoch - 34ms/step
+Epoch 2/15
+2142/2142 - 71s - loss: 0.0782 - mae: 0.0782 - val_loss: 0.0663 - val_mae: 0.0663 - 71s/epoch - 33ms/step
+Epoch 3/15
+
+Trial 8: Starting with params: {'learning_rate': 0.003978076122743744, 'lstm_units': 48, 'dropout_rate': 0.10600049979911137, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 144s - loss: 0.0675 - mae: 0.0675 - val_loss: 0.0548 - val_mae: 0.0548 - 144s/epoch - 34ms/step
+Epoch 2/15
+4283/4283 - 140s - loss: 0.0546 - mae: 0.0546 - val_loss: 0.0508 - val_mae: 0.0508 - 140s/epoch - 33ms/step
+Epoch 3/15
+4283/4283 - 141s - loss: 0.0507 - mae: 0.0507 - val_loss: 0.0508 - val_mae: 0.0508 - 141s/epoch - 33ms/step
+Epoch 4/15
+4283/4283 - 141s - loss: 0.0510 - mae: 0.0510 - val_loss: 0.0494 - val_mae: 0.0494 - 141s/epoch - 33ms/step
+Epoch 5/15
+4283/4283 - 140s - loss: 0.0492 - mae: 0.0492 - val_loss: 0.0513 - val_mae: 0.0513 - 140s/epoch - 33ms/step
+Epoch 6/15
+4283/4283 - 143s - loss: 0.0490 - mae: 0.0490 - val_loss: 0.0521 - val_mae: 0.0521 - 143s/epoch - 33ms/step
+Epoch 7/15
+4283/4283 - 146s - loss: 0.0480 - mae: 0.0480 - val_loss: 0.0505 - val_mae: 0.0505 - 146s/epoch - 34ms/step
+Trial 8: Completed with best val_mae: 0.049439
+
+Trial 9: Starting with params: {'learning_rate': 0.0004873027674480331, 'lstm_units': 16, 'dropout_rate': 0.30284183535316733, 'batch_size': 32}
+Epoch 1/15
+2142/2142 - 74s - loss: 0.1607 - mae: 0.1607 - val_loss: 0.1011 - val_mae: 0.1011 - 74s/epoch - 35ms/step
+Epoch 2/15
+2142/2142 - 71s - loss: 0.1090 - mae: 0.1090 - val_loss: 0.0855 - val_mae: 0.0855 - 71s/epoch - 33ms/step
+Epoch 3/15
+
+Trial 10: Starting with params: {'learning_rate': 0.00010444453354743611, 'lstm_units': 48, 'dropout_rate': 0.10111229618687839, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 144s - loss: 0.1296 - mae: 0.1296 - val_loss: 0.0800 - val_mae: 0.0800 - 144s/epoch - 34ms/step
+Epoch 2/15
+4283/4283 - 140s - loss: 0.0800 - mae: 0.0800 - val_loss: 0.0652 - val_mae: 0.0652 - 140s/epoch - 33ms/step
+Epoch 3/15
+
+Trial 11: Starting with params: {'learning_rate': 0.00032633153485847773, 'lstm_units': 32, 'dropout_rate': 0.15608820717184185, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 139s - loss: 0.1123 - mae: 0.1123 - val_loss: 0.0686 - val_mae: 0.0686 - 139s/epoch - 33ms/step
+Epoch 2/15
+4283/4283 - 139s - loss: 0.0781 - mae: 0.0781 - val_loss: 0.0634 - val_mae: 0.0634 - 139s/epoch - 32ms/step
+Epoch 3/15
+
+Trial 12: Starting with params: {'learning_rate': 0.0001955286084063757, 'lstm_units': 32, 'dropout_rate': 0.22768618000383178, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 141s - loss: 0.1371 - mae: 0.1371 - val_loss: 0.0862 - val_mae: 0.0862 - 141s/epoch - 33ms/step
+Epoch 2/15
+4283/4283 - 137s - loss: 0.0945 - mae: 0.0945 - val_loss: 0.0723 - val_mae: 0.0723 - 137s/epoch - 32ms/step
+Epoch 3/15
+
+Trial 13: Starting with params: {'learning_rate': 0.0006388928794658251, 'lstm_units': 32, 'dropout_rate': 0.14862417502050784, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 141s - loss: 0.0978 - mae: 0.0978 - val_loss: 0.0642 - val_mae: 0.0642 - 141s/epoch - 33ms/step
+Epoch 2/15
+4283/4283 - 138s - loss: 0.0678 - mae: 0.0678 - val_loss: 0.0591 - val_mae: 0.0591 - 138s/epoch - 32ms/step
+Epoch 3/15
+4283/4283 - 138s - loss: 0.0610 - mae: 0.0610 - val_loss: 0.0542 - val_mae: 0.0542 - 138s/epoch - 32ms/step
+Epoch 4/15
+4283/4283 - 138s - loss: 0.0599 - mae: 0.0599 - val_loss: 0.0572 - val_mae: 0.0572 - 138s/epoch - 32ms/step
+Epoch 5/15
+4283/4283 - 137s - loss: 0.0586 - mae: 0.0586 - val_loss: 0.0537 - val_mae: 0.0537 - 137s/epoch - 32ms/step
+Epoch 6/15
+4283/4283 - 138s - loss: 0.0584 - mae: 0.0584 - val_loss: 0.0527 - val_mae: 0.0527 - 138s/epoch - 32ms/step
+Epoch 7/15
+4283/4283 - 164s - loss: 0.0571 - mae: 0.0571 - val_loss: 0.0534 - val_mae: 0.0534 - 164s/epoch - 38ms/step
+Epoch 8/15
+4283/4283 - 138s - loss: 0.0574 - mae: 0.0574 - val_loss: 0.0531 - val_mae: 0.0531 - 138s/epoch - 32ms/step
+Epoch 9/15
+4283/4283 - 136s - loss: 0.0582 - mae: 0.0582 - val_loss: 0.0565 - val_mae: 0.0565 - 136s/epoch - 32ms/step
+Trial 13: Completed with best val_mae: 0.052728
+
+Trial 14: Starting with params: {'learning_rate': 0.001206845238171519, 'lstm_units': 48, 'dropout_rate': 0.1430536398950782, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 141s - loss: 0.0796 - mae: 0.0796 - val_loss: 0.0557 - val_mae: 0.0557 - 141s/epoch - 33ms/step
+Epoch 2/15
+4283/4283 - 145s - loss: 0.0568 - mae: 0.0568 - val_loss: 0.0512 - val_mae: 0.0512 - 145s/epoch - 34ms/step
+Epoch 3/15
+4283/4283 - 145s - loss: 0.0543 - mae: 0.0543 - val_loss: 0.0531 - val_mae: 0.0531 - 145s/epoch - 34ms/step
+Epoch 4/15
+4283/4283 - 146s - loss: 0.0524 - mae: 0.0524 - val_loss: 0.0520 - val_mae: 0.0520 - 146s/epoch - 34ms/step
+Epoch 5/15
+4283/4283 - 145s - loss: 0.0583 - mae: 0.0583 - val_loss: 0.0536 - val_mae: 0.0536 - 145s/epoch - 34ms/step
+Trial 14: Completed with best val_mae: 0.051211
+
+Trial 15: Starting with params: {'learning_rate': 0.0016101723046774965, 'lstm_units': 48, 'dropout_rate': 0.24970451864120882, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 148s - loss: 0.0838 - mae: 0.0838 - val_loss: 0.0571 - val_mae: 0.0571 - 148s/epoch - 35ms/step
+Epoch 2/15
+4283/4283 - 144s - loss: 0.0647 - mae: 0.0647 - val_loss: 0.0554 - val_mae: 0.0554 - 144s/epoch - 34ms/step
+Epoch 3/15
+4283/4283 - 145s - loss: 0.0631 - mae: 0.0631 - val_loss: 0.0570 - val_mae: 0.0570 - 145s/epoch - 34ms/step
+Epoch 4/15
+4283/4283 - 146s - loss: 0.0621 - mae: 0.0621 - val_loss: 0.0548 - val_mae: 0.0548 - 146s/epoch - 34ms/step
+Epoch 5/15
+4283/4283 - 143s - loss: 0.0615 - mae: 0.0615 - val_loss: 0.0562 - val_mae: 0.0562 - 143s/epoch - 33ms/step
+Epoch 6/15
+4283/4283 - 139s - loss: 0.0607 - mae: 0.0607 - val_loss: 0.0572 - val_mae: 0.0572 - 139s/epoch - 33ms/step
+Epoch 7/15
+4283/4283 - 138s - loss: 0.0601 - mae: 0.0601 - val_loss: 0.0583 - val_mae: 0.0583 - 138s/epoch - 32ms/step
+Trial 15: Completed with best val_mae: 0.054783
+
+Trial 16: Starting with params: {'learning_rate': 0.0008416307261458529, 'lstm_units': 48, 'dropout_rate': 0.1280188607671534, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 145s - loss: 0.0822 - mae: 0.0822 - val_loss: 0.0561 - val_mae: 0.0561 - 145s/epoch - 34ms/step
+Epoch 2/15
+4283/4283 - 147s - loss: 0.0575 - mae: 0.0575 - val_loss: 0.0538 - val_mae: 0.0538 - 147s/epoch - 34ms/step
+Epoch 3/15
+4283/4283 - 141s - loss: 0.0528 - mae: 0.0528 - val_loss: 0.0529 - val_mae: 0.0529 - 141s/epoch - 33ms/step
+Epoch 4/15
+4283/4283 - 138s - loss: 0.0518 - mae: 0.0518 - val_loss: 0.0522 - val_mae: 0.0522 - 138s/epoch - 32ms/step
+Epoch 5/15
+4283/4283 - 138s - loss: 0.0520 - mae: 0.0520 - val_loss: 0.0559 - val_mae: 0.0559 - 138s/epoch - 32ms/step
+Epoch 6/15
+4283/4283 - 138s - loss: 0.0502 - mae: 0.0502 - val_loss: 0.0536 - val_mae: 0.0536 - 138s/epoch - 32ms/step
+Epoch 7/15
+4283/4283 - 138s - loss: 0.0486 - mae: 0.0486 - val_loss: 0.0575 - val_mae: 0.0575 - 138s/epoch - 32ms/step
+Trial 16: Completed with best val_mae: 0.052187
+
+Trial 17: Starting with params: {'learning_rate': 0.0023612067734083246, 'lstm_units': 48, 'dropout_rate': 0.19788638335309597, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 146s - loss: 0.0773 - mae: 0.0773 - val_loss: 0.0535 - val_mae: 0.0535 - 146s/epoch - 34ms/step
+Epoch 2/15
+4283/4283 - 138s - loss: 0.0610 - mae: 0.0610 - val_loss: 0.0535 - val_mae: 0.0535 - 138s/epoch - 32ms/step
+Epoch 3/15
+4283/4283 - 139s - loss: 0.0594 - mae: 0.0594 - val_loss: 0.0519 - val_mae: 0.0519 - 139s/epoch - 32ms/step
+Epoch 4/15
+4283/4283 - 139s - loss: 0.0580 - mae: 0.0580 - val_loss: 0.0549 - val_mae: 0.0549 - 139s/epoch - 33ms/step
+Epoch 5/15
+4283/4283 - 145s - loss: 0.0569 - mae: 0.0569 - val_loss: 0.0522 - val_mae: 0.0522 - 145s/epoch - 34ms/step
+Epoch 6/15
+4283/4283 - 145s - loss: 0.0589 - mae: 0.0589 - val_loss: 0.0549 - val_mae: 0.0549 - 145s/epoch - 34ms/step
+Trial 17: Completed with best val_mae: 0.051948
+
+Trial 18: Starting with params: {'learning_rate': 0.004638012681676265, 'lstm_units': 48, 'dropout_rate': 0.10804032825116824, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 145s - loss: 0.0666 - mae: 0.0666 - val_loss: 0.0531 - val_mae: 0.0531 - 145s/epoch - 34ms/step
+Epoch 2/15
+4283/4283 - 147s - loss: 0.0532 - mae: 0.0532 - val_loss: 0.0510 - val_mae: 0.0510 - 147s/epoch - 34ms/step
+Epoch 3/15
+4283/4283 - 141s - loss: 0.0508 - mae: 0.0508 - val_loss: 0.0517 - val_mae: 0.0517 - 141s/epoch - 33ms/step
+Epoch 4/15
+4283/4283 - 146s - loss: 0.0495 - mae: 0.0495 - val_loss: 0.0536 - val_mae: 0.0536 - 146s/epoch - 34ms/step
+Epoch 5/15
+4283/4283 - 144s - loss: 0.0485 - mae: 0.0485 - val_loss: 0.0524 - val_mae: 0.0524 - 144s/epoch - 34ms/step
+Trial 18: Completed with best val_mae: 0.050985
+
+Trial 19: Starting with params: {'learning_rate': 0.004322787693558279, 'lstm_units': 48, 'dropout_rate': 0.10083161860632255, 'batch_size': 16}
+Epoch 1/15
+4283/4283 - 162s - loss: 0.0662 - mae: 0.0662 - val_loss: 0.0539 - val_mae: 0.0539 - 162s/epoch - 38ms/step
+Epoch 2/15
+4283/4283 - 152s - loss: 0.0516 - mae: 0.0516 - val_loss: 0.0541 - val_mae: 0.0541 - 152s/epoch - 36ms/step
+Epoch 3/15
+4283/4283 - 140s - loss: 0.0499 - mae: 0.0499 - val_loss: 0.0546 - val_mae: 0.0546 - 140s/epoch - 33ms/step
+Epoch 4/15
+4283/4283 - 141s - loss: 0.0533 - mae: 0.0533 - val_loss: 0.0526 - val_mae: 0.0526 - 141s/epoch - 33ms/step
+Epoch 5/15
+4283/4283 - 141s - loss: 0.0491 - mae: 0.0491 - val_loss: 0.0519 - val_mae: 0.0519 - 141s/epoch - 33ms/step
+Epoch 6/15
+4283/4283 - 145s - loss: 0.0476 - mae: 0.0476 - val_loss: 0.0567 - val_mae: 0.0567 - 145s/epoch - 34ms/step
+Epoch 7/15
+4283/4283 - 146s - loss: 0.0478 - mae: 0.0478 - val_loss: 0.0605 - val_mae: 0.0605 - 146s/epoch - 34ms/step
+Epoch 8/15
+4283/4283 - 139s - loss: 0.0482 - mae: 0.0482 - val_loss: 0.0600 - val_mae: 0.0600 - 139s/epoch - 32ms/step
+Trial 19: Completed with best val_mae: 0.051913
+
+--- Hyperparameter Optimization Finished for HORIZON: MEDIUM ---
+Number of finished trials for medium: 20
+Best trial for LSTM medium:
+  Value (min val_mae_scaled): 0.049439
+  Best Parameters:
+    learning_rate: 0.003978076122743744
+    lstm_units: 48
+    dropout_rate: 0.10600049979911137
+    batch_size: 16
+
+==================== Starting HPO for HORIZON: LONG ====================
+Base configuration loaded for long: {'input_window': 672, 'output_horizon': 2880, 'min_input_window': 96, 'target_column': 'actual_load', 'train_split': 0.8, 'val_split': 0.1, 'num_workers': 2, 'run_tag': 'baseline_final_lstm_long', 'epochs': 7, 'early_stopping_patience': 2, 'batch_size': 4, 'lags': [1, 96, 672], 'feature_scaler': 'MinMax', 'target_scaler': 'MinMax', 'lstm_units': 32, 'dropout_rate': 0.1, 'loss_function': 'mae', 'exogenous_features': ['hour_sin', 'hour_cos', 'weekday_sin', 'weekday_cos', 'month_sin', 'month_cos', 'is_daylight', 'year', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation'], 'run_tag_tft': 'baseline_final_tft_long', 'hidden_size': 16, 'attention_head_size': 1, 'dropout': 0.1, 'gradient_clip_val': 0.1, 'exogenous_features_tft': ['hour', 'is_daylight', 'month', 'year', 'weekday', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']}
+Attempting to add exogenous features: ['hour_sin', 'hour_cos', 'weekday_sin', 'weekday_cos', 'month_sin', 'month_cos', 'is_daylight', 'year', 'weekend_flag', 'holiday_flag', 'temperature', 'solar_capacity', 'solar_generation', 'wind_capacity', 'wind_generation', 'wind_offshore_capacity', 'wind_offshore_generation', 'wind_onshore_capacity', 'wind_onshore_generation']
+--- The Test Set Start Date is: 2019-07-02 04:30:00+00:00 ---
+LSTM data splits (after lag drop): Train 139596, Val 17449, Test 17450
+Total number of input features for LSTM (X): 22
+Data prepared for long: X_train shape (136045, 672, 22), X_val shape (13898, 672, 22)
+Using a 50.0% subset of training data for HPO. New shape: (68023, 672, 22)
+Starting Optuna optimization for long horizon with 20 trials...
+
+Trial 0: Starting with params: {'learning_rate': 0.0014202743296726965, 'lstm_units': 32, 'dropout_rate': 0.3341655193891183, 'batch_size': 16}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 289s - loss: 0.0912 - mae: 0.0912 - val_loss: 0.0668 - val_mae: 0.0668 - 289s/epoch - 17ms/step
+Epoch 2/15
+17006/17006 - 290s - loss: 0.0807 - mae: 0.0807 - val_loss: 0.0661 - val_mae: 0.0661 - 290s/epoch - 17ms/step
+Epoch 3/15
+17006/17006 - 292s - loss: 0.0797 - mae: 0.0797 - val_loss: 0.0648 - val_mae: 0.0648 - 292s/epoch - 17ms/step
+Epoch 4/15
+17006/17006 - 290s - loss: 0.0791 - mae: 0.0791 - val_loss: 0.0678 - val_mae: 0.0678 - 290s/epoch - 17ms/step
+Epoch 5/15
+17006/17006 - 290s - loss: 0.0787 - mae: 0.0787 - val_loss: 0.0685 - val_mae: 0.0685 - 290s/epoch - 17ms/step
+Epoch 6/15
+17006/17006 - 288s - loss: 0.0784 - mae: 0.0784 - val_loss: 0.0675 - val_mae: 0.0675 - 288s/epoch - 17ms/step
+Trial 0: Completed with best val_mae: 0.064756
+
+Trial 1: Starting with params: {'learning_rate': 0.001571878916656536, 'lstm_units': 16, 'dropout_rate': 0.3319910370202831, 'batch_size': 16}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 288s - loss: 0.1038 - mae: 0.1038 - val_loss: 0.0767 - val_mae: 0.0767 - 288s/epoch - 17ms/step
+Epoch 2/15
+17006/17006 - 288s - loss: 0.0947 - mae: 0.0947 - val_loss: 0.0758 - val_mae: 0.0758 - 288s/epoch - 17ms/step
+Epoch 3/15
+17006/17006 - 293s - loss: 0.0941 - mae: 0.0941 - val_loss: 0.0766 - val_mae: 0.0766 - 293s/epoch - 17ms/step
+Epoch 4/15
+17006/17006 - 404s - loss: 0.0937 - mae: 0.0937 - val_loss: 0.0736 - val_mae: 0.0736 - 404s/epoch - 24ms/step
+Epoch 5/15
+17006/17006 - 424s - loss: 0.0936 - mae: 0.0936 - val_loss: 0.0760 - val_mae: 0.0760 - 424s/epoch - 25ms/step
+Epoch 6/15
+17006/17006 - 424s - loss: 0.0933 - mae: 0.0933 - val_loss: 0.0746 - val_mae: 0.0746 - 424s/epoch - 25ms/step
+Epoch 7/15
+17006/17006 - 424s - loss: 0.0931 - mae: 0.0931 - val_loss: 0.0752 - val_mae: 0.0752 - 424s/epoch - 25ms/step
+Trial 1: Completed with best val_mae: 0.073640
+
+Trial 2: Starting with params: {'learning_rate': 0.0014157880008383726, 'lstm_units': 16, 'dropout_rate': 0.19303340819552123, 'batch_size': 16}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 457s - loss: 0.0913 - mae: 0.0913 - val_loss: 0.0686 - val_mae: 0.0686 - 457s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 455s - loss: 0.0794 - mae: 0.0794 - val_loss: 0.0643 - val_mae: 0.0643 - 455s/epoch - 27ms/step
+Epoch 3/15
+17006/17006 - 459s - loss: 0.0784 - mae: 0.0784 - val_loss: 0.0687 - val_mae: 0.0687 - 459s/epoch - 27ms/step
+Epoch 4/15
+17006/17006 - 456s - loss: 0.0777 - mae: 0.0777 - val_loss: 0.0717 - val_mae: 0.0717 - 456s/epoch - 27ms/step
+Epoch 5/15
+17006/17006 - 447s - loss: 0.0773 - mae: 0.0773 - val_loss: 0.0680 - val_mae: 0.0680 - 447s/epoch - 26ms/step
+Trial 2: Completed with best val_mae: 0.064281
+
+Trial 3: Starting with params: {'learning_rate': 0.000425927024138917, 'lstm_units': 32, 'dropout_rate': 0.18777896494781698, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 457s - loss: 0.0938 - mae: 0.0938 - val_loss: 0.0603 - val_mae: 0.0603 - 457s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 459s - loss: 0.0687 - mae: 0.0687 - val_loss: 0.0562 - val_mae: 0.0562 - 459s/epoch - 27ms/step
+Epoch 3/15
+17006/17006 - 457s - loss: 0.0659 - mae: 0.0659 - val_loss: 0.0544 - val_mae: 0.0544 - 457s/epoch - 27ms/step
+Epoch 4/15
+17006/17006 - 454s - loss: 0.0649 - mae: 0.0649 - val_loss: 0.0559 - val_mae: 0.0559 - 454s/epoch - 27ms/step
+Epoch 5/15
+17006/17006 - 454s - loss: 0.0642 - mae: 0.0642 - val_loss: 0.0558 - val_mae: 0.0558 - 454s/epoch - 27ms/step
+Epoch 6/15
+17006/17006 - 453s - loss: 0.0637 - mae: 0.0637 - val_loss: 0.0580 - val_mae: 0.0580 - 453s/epoch - 27ms/step
+Trial 3: Completed with best val_mae: 0.054372
+
+Trial 4: Starting with params: {'learning_rate': 0.0006040775375788368, 'lstm_units': 48, 'dropout_rate': 0.18740257410944788, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 497s - loss: 0.0803 - mae: 0.0803 - val_loss: 0.0625 - val_mae: 0.0625 - 497s/epoch - 29ms/step
+Epoch 2/15
+17006/17006 - 497s - loss: 0.0616 - mae: 0.0616 - val_loss: 0.0567 - val_mae: 0.0567 - 497s/epoch - 29ms/step
+Epoch 3/15
+17006/17006 - 496s - loss: 0.0599 - mae: 0.0599 - val_loss: 0.0610 - val_mae: 0.0610 - 496s/epoch - 29ms/step
+Epoch 4/15
+17006/17006 - 496s - loss: 0.0588 - mae: 0.0588 - val_loss: 0.0618 - val_mae: 0.0618 - 496s/epoch - 29ms/step
+Epoch 5/15
+17006/17006 - 490s - loss: 0.0582 - mae: 0.0582 - val_loss: 0.0680 - val_mae: 0.0680 - 490s/epoch - 29ms/step
+Trial 4: Completed with best val_mae: 0.056701
+
+Trial 5: Starting with params: {'learning_rate': 0.0014135342533596327, 'lstm_units': 48, 'dropout_rate': 0.3796547709213003, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 501s - loss: 0.0873 - mae: 0.0873 - val_loss: 0.0650 - val_mae: 0.0650 - 501s/epoch - 29ms/step
+Epoch 2/15
+17006/17006 - 499s - loss: 0.0772 - mae: 0.0772 - val_loss: 0.0619 - val_mae: 0.0619 - 499s/epoch - 29ms/step
+Epoch 3/15
+17006/17006 - 485s - loss: 0.0761 - mae: 0.0761 - val_loss: 0.0631 - val_mae: 0.0631 - 485s/epoch - 29ms/step
+Epoch 4/15
+17006/17006 - 488s - loss: 0.0754 - mae: 0.0754 - val_loss: 0.0631 - val_mae: 0.0631 - 488s/epoch - 29ms/step
+Epoch 5/15
+17006/17006 - 489s - loss: 0.0749 - mae: 0.0749 - val_loss: 0.0603 - val_mae: 0.0603 - 489s/epoch - 29ms/step
+Epoch 6/15
+17006/17006 - 494s - loss: 0.0745 - mae: 0.0745 - val_loss: 0.0626 - val_mae: 0.0626 - 494s/epoch - 29ms/step
+Epoch 7/15
+17006/17006 - 494s - loss: 0.0743 - mae: 0.0743 - val_loss: 0.0620 - val_mae: 0.0620 - 494s/epoch - 29ms/step
+Epoch 8/15
+17006/17006 - 497s - loss: 0.0742 - mae: 0.0742 - val_loss: 0.0655 - val_mae: 0.0655 - 497s/epoch - 29ms/step
+Trial 5: Completed with best val_mae: 0.060260
+
+Trial 6: Starting with params: {'learning_rate': 0.00015612537783488582, 'lstm_units': 16, 'dropout_rate': 0.3935999675576748, 'batch_size': 16}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 461s - loss: 0.1542 - mae: 0.1542 - val_loss: 0.1008 - val_mae: 0.1008 - 461s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 461s - loss: 0.1102 - mae: 0.1102 - val_loss: 0.0890 - val_mae: 0.0890 - 461s/epoch - 27ms/step
+Epoch 3/15
+
+Trial 7: Starting with params: {'learning_rate': 0.0015770559504107377, 'lstm_units': 32, 'dropout_rate': 0.2206242694628732, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 462s - loss: 0.0818 - mae: 0.0818 - val_loss: 0.0604 - val_mae: 0.0604 - 462s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 463s - loss: 0.0699 - mae: 0.0699 - val_loss: 0.0584 - val_mae: 0.0584 - 463s/epoch - 27ms/step
+Epoch 3/15
+17006/17006 - 455s - loss: 0.0686 - mae: 0.0686 - val_loss: 0.0568 - val_mae: 0.0568 - 455s/epoch - 27ms/step
+Epoch 4/15
+17006/17006 - 469s - loss: 0.0679 - mae: 0.0679 - val_loss: 0.0593 - val_mae: 0.0593 - 469s/epoch - 28ms/step
+Epoch 5/15
+17006/17006 - 476s - loss: 0.0675 - mae: 0.0675 - val_loss: 0.0560 - val_mae: 0.0560 - 476s/epoch - 28ms/step
+Epoch 6/15
+17006/17006 - 477s - loss: 0.0670 - mae: 0.0670 - val_loss: 0.0610 - val_mae: 0.0610 - 477s/epoch - 28ms/step
+Epoch 7/15
+17006/17006 - 473s - loss: 0.0669 - mae: 0.0669 - val_loss: 0.0632 - val_mae: 0.0632 - 473s/epoch - 28ms/step
+Epoch 8/15
+17006/17006 - 472s - loss: 0.0666 - mae: 0.0666 - val_loss: 0.0600 - val_mae: 0.0600 - 472s/epoch - 28ms/step
+Trial 7: Completed with best val_mae: 0.056035
+
+Trial 8: Starting with params: {'learning_rate': 0.0019178345081057708, 'lstm_units': 16, 'dropout_rate': 0.1693263783949035, 'batch_size': 16}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 458s - loss: 0.0881 - mae: 0.0881 - val_loss: 0.0675 - val_mae: 0.0675 - 458s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 449s - loss: 0.0768 - mae: 0.0768 - val_loss: 0.0646 - val_mae: 0.0646 - 449s/epoch - 26ms/step
+Epoch 3/15
+
+Trial 9: Starting with params: {'learning_rate': 0.00123896614753341, 'lstm_units': 32, 'dropout_rate': 0.11520553023352526, 'batch_size': 16}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 460s - loss: 0.0734 - mae: 0.0734 - val_loss: 0.0613 - val_mae: 0.0613 - 460s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 465s - loss: 0.0586 - mae: 0.0586 - val_loss: 0.0596 - val_mae: 0.0596 - 465s/epoch - 27ms/step
+Epoch 3/15
+17006/17006 - 462s - loss: 0.0574 - mae: 0.0574 - val_loss: 0.0606 - val_mae: 0.0606 - 462s/epoch - 27ms/step
+Epoch 4/15
+17006/17006 - 460s - loss: 0.0564 - mae: 0.0564 - val_loss: 0.0628 - val_mae: 0.0628 - 460s/epoch - 27ms/step
+Epoch 5/15
+17006/17006 - 460s - loss: 0.0556 - mae: 0.0556 - val_loss: 0.0601 - val_mae: 0.0601 - 460s/epoch - 27ms/step
+Trial 9: Completed with best val_mae: 0.059622
+
+Trial 10: Starting with params: {'learning_rate': 0.00029330654351615717, 'lstm_units': 32, 'dropout_rate': 0.26965510194312203, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 465s - loss: 0.1063 - mae: 0.1063 - val_loss: 0.0710 - val_mae: 0.0710 - 465s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 459s - loss: 0.0783 - mae: 0.0783 - val_loss: 0.0661 - val_mae: 0.0661 - 459s/epoch - 27ms/step
+Epoch 3/15
+17006/17006 - 461s - loss: 0.0749 - mae: 0.0749 - val_loss: 0.0617 - val_mae: 0.0617 - 461s/epoch - 27ms/step
+Epoch 4/15
+17006/17006 - 458s - loss: 0.0738 - mae: 0.0738 - val_loss: 0.0616 - val_mae: 0.0616 - 458s/epoch - 27ms/step
+Epoch 5/15
+17006/17006 - 458s - loss: 0.0731 - mae: 0.0731 - val_loss: 0.0605 - val_mae: 0.0605 - 458s/epoch - 27ms/step
+Epoch 6/15
+17006/17006 - 460s - loss: 0.0727 - mae: 0.0727 - val_loss: 0.0588 - val_mae: 0.0588 - 460s/epoch - 27ms/step
+Epoch 7/15
+17006/17006 - 457s - loss: 0.0724 - mae: 0.0724 - val_loss: 0.0612 - val_mae: 0.0612 - 457s/epoch - 27ms/step
+Epoch 8/15
+17006/17006 - 455s - loss: 0.0721 - mae: 0.0721 - val_loss: 0.0629 - val_mae: 0.0629 - 455s/epoch - 27ms/step
+Epoch 9/15
+17006/17006 - 456s - loss: 0.0718 - mae: 0.0718 - val_loss: 0.0636 - val_mae: 0.0636 - 456s/epoch - 27ms/step
+Trial 10: Completed with best val_mae: 0.058809
+
+Trial 11: Starting with params: {'learning_rate': 0.00048331315184685055, 'lstm_units': 32, 'dropout_rate': 0.24542379647097323, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 460s - loss: 0.0953 - mae: 0.0953 - val_loss: 0.0661 - val_mae: 0.0661 - 460s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 456s - loss: 0.0732 - mae: 0.0732 - val_loss: 0.0634 - val_mae: 0.0634 - 456s/epoch - 27ms/step
+Epoch 3/15
+
+Trial 12: Starting with params: {'learning_rate': 0.0033184788144835936, 'lstm_units': 32, 'dropout_rate': 0.23760823274864595, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 458s - loss: 0.0808 - mae: 0.0808 - val_loss: 0.0618 - val_mae: 0.0618 - 458s/epoch - 27ms/step
+Epoch 2/15
+17006/17006 - 456s - loss: 0.0726 - mae: 0.0726 - val_loss: 0.0582 - val_mae: 0.0582 - 456s/epoch - 27ms/step
+Epoch 3/15
+17006/17006 - 458s - loss: 0.0714 - mae: 0.0714 - val_loss: 0.0593 - val_mae: 0.0593 - 458s/epoch - 27ms/step
+Epoch 4/15
+17006/17006 - 469s - loss: 0.0708 - mae: 0.0708 - val_loss: 0.0605 - val_mae: 0.0605 - 469s/epoch - 28ms/step
+Epoch 5/15
+17006/17006 - 476s - loss: 0.0704 - mae: 0.0704 - val_loss: 0.0591 - val_mae: 0.0591 - 476s/epoch - 28ms/step
+Trial 12: Completed with best val_mae: 0.058162
+
+Trial 13: Starting with params: {'learning_rate': 0.004805245470351555, 'lstm_units': 32, 'dropout_rate': 0.12210106719923726, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 476s - loss: 0.0692 - mae: 0.0692 - val_loss: 0.0557 - val_mae: 0.0557 - 476s/epoch - 28ms/step
+Epoch 2/15
+17006/17006 - 474s - loss: 0.0607 - mae: 0.0607 - val_loss: 0.0534 - val_mae: 0.0534 - 474s/epoch - 28ms/step
+Epoch 3/15
+17006/17006 - 475s - loss: 0.0595 - mae: 0.0595 - val_loss: 0.0549 - val_mae: 0.0549 - 475s/epoch - 28ms/step
+Epoch 4/15
+17006/17006 - 474s - loss: 0.0589 - mae: 0.0589 - val_loss: 0.0582 - val_mae: 0.0582 - 474s/epoch - 28ms/step
+Epoch 5/15
+17006/17006 - 473s - loss: 0.0585 - mae: 0.0585 - val_loss: 0.0558 - val_mae: 0.0558 - 473s/epoch - 28ms/step
+Trial 13: Completed with best val_mae: 0.053382
+
+Trial 14: Starting with params: {'learning_rate': 0.004728015042352249, 'lstm_units': 32, 'dropout_rate': 0.10422559884548345, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 480s - loss: 0.0674 - mae: 0.0674 - val_loss: 0.0541 - val_mae: 0.0541 - 480s/epoch - 28ms/step
+Epoch 2/15
+17006/17006 - 474s - loss: 0.0584 - mae: 0.0584 - val_loss: 0.0540 - val_mae: 0.0540 - 474s/epoch - 28ms/step
+Epoch 3/15
+17006/17006 - 539s - loss: 0.0573 - mae: 0.0573 - val_loss: 0.0532 - val_mae: 0.0532 - 539s/epoch - 32ms/step
+Epoch 4/15
+17006/17006 - 540s - loss: 0.0567 - mae: 0.0567 - val_loss: 0.0557 - val_mae: 0.0557 - 540s/epoch - 32ms/step
+Epoch 5/15
+17006/17006 - 530s - loss: 0.0563 - mae: 0.0563 - val_loss: 0.0568 - val_mae: 0.0568 - 530s/epoch - 31ms/step
+Epoch 6/15
+17006/17006 - 527s - loss: 0.0561 - mae: 0.0561 - val_loss: 0.0564 - val_mae: 0.0564 - 527s/epoch - 31ms/step
+Trial 14: Completed with best val_mae: 0.053193
+
+Trial 15: Starting with params: {'learning_rate': 0.004709627545511966, 'lstm_units': 48, 'dropout_rate': 0.1052193899323888, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 582s - loss: 0.0634 - mae: 0.0634 - val_loss: 0.0552 - val_mae: 0.0552 - 582s/epoch - 34ms/step
+Epoch 2/15
+17006/17006 - 590s - loss: 0.0543 - mae: 0.0543 - val_loss: 0.0533 - val_mae: 0.0533 - 590s/epoch - 35ms/step
+Epoch 3/15
+17006/17006 - 583s - loss: 0.0529 - mae: 0.0529 - val_loss: 0.0575 - val_mae: 0.0575 - 583s/epoch - 34ms/step
+Epoch 4/15
+17006/17006 - 579s - loss: 0.0644 - mae: 0.0644 - val_loss: 0.0578 - val_mae: 0.0578 - 579s/epoch - 34ms/step
+Epoch 5/15
+17006/17006 - 589s - loss: 0.0534 - mae: 0.0534 - val_loss: 0.0599 - val_mae: 0.0599 - 589s/epoch - 35ms/step
+Trial 15: Completed with best val_mae: 0.053317
+
+Trial 16: Starting with params: {'learning_rate': 0.0030434396899477463, 'lstm_units': 48, 'dropout_rate': 0.10203172756733457, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 578s - loss: 0.0627 - mae: 0.0627 - val_loss: 0.0534 - val_mae: 0.0534 - 578s/epoch - 34ms/step
+Epoch 2/15
+17006/17006 - 578s - loss: 0.0534 - mae: 0.0534 - val_loss: 0.0528 - val_mae: 0.0528 - 578s/epoch - 34ms/step
+Epoch 3/15
+17006/17006 - 581s - loss: 0.0520 - mae: 0.0520 - val_loss: 0.0543 - val_mae: 0.0543 - 581s/epoch - 34ms/step
+Epoch 4/15
+17006/17006 - 578s - loss: 0.0513 - mae: 0.0513 - val_loss: 0.0534 - val_mae: 0.0534 - 578s/epoch - 34ms/step
+Epoch 5/15
+17006/17006 - 593s - loss: 0.0509 - mae: 0.0509 - val_loss: 0.0537 - val_mae: 0.0537 - 593s/epoch - 35ms/step
+Trial 16: Completed with best val_mae: 0.052791
+
+Trial 17: Starting with params: {'learning_rate': 0.002307085461611753, 'lstm_units': 48, 'dropout_rate': 0.14661183873641115, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 594s - loss: 0.0677 - mae: 0.0677 - val_loss: 0.0538 - val_mae: 0.0538 - 594s/epoch - 35ms/step
+Epoch 2/15
+17006/17006 - 584s - loss: 0.0575 - mae: 0.0575 - val_loss: 0.0553 - val_mae: 0.0553 - 584s/epoch - 34ms/step
+Epoch 3/15
+17006/17006 - 590s - loss: 0.0561 - mae: 0.0561 - val_loss: 0.0541 - val_mae: 0.0541 - 590s/epoch - 35ms/step
+Epoch 4/15
+17006/17006 - 594s - loss: 0.0551 - mae: 0.0551 - val_loss: 0.0550 - val_mae: 0.0550 - 594s/epoch - 35ms/step
+Trial 17: Completed with best val_mae: 0.053763
+
+Trial 18: Starting with params: {'learning_rate': 0.002796031098397153, 'lstm_units': 48, 'dropout_rate': 0.15566843630440388, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 599s - loss: 0.0678 - mae: 0.0678 - val_loss: 0.0553 - val_mae: 0.0553 - 599s/epoch - 35ms/step
+Epoch 2/15
+17006/17006 - 598s - loss: 0.0584 - mae: 0.0584 - val_loss: 0.0871 - val_mae: 0.0871 - 598s/epoch - 35ms/step
+Epoch 3/15
+17006/17006 - 615s - loss: 0.0577 - mae: 0.0577 - val_loss: 0.0543 - val_mae: 0.0543 - 615s/epoch - 36ms/step
+Epoch 4/15
+17006/17006 - 612s - loss: 0.0570 - mae: 0.0570 - val_loss: 0.0559 - val_mae: 0.0559 - 612s/epoch - 36ms/step
+Epoch 5/15
+17006/17006 - 615s - loss: 0.0562 - mae: 0.0562 - val_loss: 0.0595 - val_mae: 0.0595 - 615s/epoch - 36ms/step
+Epoch 6/15
+17006/17006 - 614s - loss: 0.0561 - mae: 0.0561 - val_loss: 0.0590 - val_mae: 0.0590 - 614s/epoch - 36ms/step
+Trial 18: Completed with best val_mae: 0.054298
+
+Trial 19: Starting with params: {'learning_rate': 0.0007595768943969787, 'lstm_units': 48, 'dropout_rate': 0.13760053391516672, 'batch_size': 32}
+Long horizon, forcing conservative batch size: 4
+Epoch 1/15
+17006/17006 - 615s - loss: 0.0741 - mae: 0.0741 - val_loss: 0.0600 - val_mae: 0.0600 - 615s/epoch - 36ms/step
+Epoch 2/15
+17006/17006 - 601s - loss: 0.0569 - mae: 0.0569 - val_loss: 0.0555 - val_mae: 0.0555 - 601s/epoch - 35ms/step
+Epoch 3/15
+17006/17006 - 596s - loss: 0.0551 - mae: 0.0551 - val_loss: 0.0566 - val_mae: 0.0566 - 596s/epoch - 35ms/step
+Epoch 4/15
+17006/17006 - 600s - loss: 0.0539 - mae: 0.0539 - val_loss: 0.0567 - val_mae: 0.0567 - 600s/epoch - 35ms/step
+Epoch 5/15
+17006/17006 - 591s - loss: 0.0534 - mae: 0.0534 - val_loss: 0.0626 - val_mae: 0.0626 - 591s/epoch - 35ms/step
+Trial 19: Completed with best val_mae: 0.055499
+
+--- Hyperparameter Optimization Finished for HORIZON: LONG ---
+Number of finished trials for long: 20
+Best trial for LSTM long:
+  Value (min val_mae_scaled): 0.052791
+  Best Parameters:
+    learning_rate: 0.0030434396899477463
+    lstm_units: 48
+    dropout_rate: 0.10203172756733457
+    batch_size: 32

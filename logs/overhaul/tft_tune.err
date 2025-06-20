@@ -1,0 +1,734 @@
+/var/spool/slurm/slurmd/job33559/slurm_script: line 17: activate: No such file or directory
+[rank: 0] Global seed set to 42
+[32m[I 2025-06-13 08:34:29,020][0m A new study created in memory with name: tft_short_hpo_study_final[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 2.8 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 20.4 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 19.1 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 4.3 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 4.3 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 4.3 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 4.3 K 
+11 | lstm_encoder                       | LSTM                            | 8.4 K 
+12 | lstm_decoder                       | LSTM                            | 8.4 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 2.1 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 64    
+15 | static_enrichment                  | GatedResidualNetwork            | 5.3 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 4.2 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 2.2 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 4.3 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 2.2 K 
+20 | output_layer                       | Linear                          | 33    
+----------------------------------------------------------------------------------------
+96.5 K    Trainable params
+0         Non-trainable params
+96.5 K    Total params
+0.386     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-13 11:42:42,073][0m Trial 0 finished with value: 2476.744384765625 and parameters: {'learning_rate': 0.004622374211593363, 'hidden_size': 32, 'attention_head_size': 1, 'dropout': 0.27743684822673487, 'batch_size': 16}. Best is trial 0 with value: 2476.744384765625.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 5.0 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 34.3 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 32.2 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 16.8 K
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 16.8 K
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 16.8 K
+10 | static_context_enrichment          | GatedResidualNetwork            | 16.8 K
+11 | lstm_encoder                       | LSTM                            | 33.3 K
+12 | lstm_decoder                       | LSTM                            | 33.3 K
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 8.3 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 128   
+15 | static_enrichment                  | GatedResidualNetwork            | 20.9 K
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 16.6 K
+17 | post_attn_gate_norm                | GateAddNorm                     | 8.4 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 16.8 K
+19 | pre_output_gate_norm               | GateAddNorm                     | 8.4 K 
+20 | output_layer                       | Linear                          | 65    
+----------------------------------------------------------------------------------------
+284 K     Trainable params
+0         Non-trainable params
+284 K     Total params
+1.138     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-13 14:50:06,976][0m Trial 1 finished with value: 2088.3544921875 and parameters: {'learning_rate': 0.00013752869143452082, 'hidden_size': 64, 'attention_head_size': 1, 'dropout': 0.2662190098689041, 'batch_size': 16}. Best is trial 1 with value: 2088.3544921875.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 5.0 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 34.3 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 32.2 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 16.8 K
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 16.8 K
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 16.8 K
+10 | static_context_enrichment          | GatedResidualNetwork            | 16.8 K
+11 | lstm_encoder                       | LSTM                            | 33.3 K
+12 | lstm_decoder                       | LSTM                            | 33.3 K
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 8.3 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 128   
+15 | static_enrichment                  | GatedResidualNetwork            | 20.9 K
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 16.6 K
+17 | post_attn_gate_norm                | GateAddNorm                     | 8.4 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 16.8 K
+19 | pre_output_gate_norm               | GateAddNorm                     | 8.4 K 
+20 | output_layer                       | Linear                          | 65    
+----------------------------------------------------------------------------------------
+284 K     Trainable params
+0         Non-trainable params
+284 K     Total params
+1.138     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-13 18:00:45,446][0m Trial 2 finished with value: 1810.215576171875 and parameters: {'learning_rate': 0.00013038325764849854, 'hidden_size': 64, 'attention_head_size': 1, 'dropout': 0.17932427800820577, 'batch_size': 16}. Best is trial 2 with value: 1810.215576171875.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 2.8 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 20.4 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 19.1 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 4.3 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 4.3 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 4.3 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 4.3 K 
+11 | lstm_encoder                       | LSTM                            | 8.4 K 
+12 | lstm_decoder                       | LSTM                            | 8.4 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 2.1 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 64    
+15 | static_enrichment                  | GatedResidualNetwork            | 5.3 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 2.6 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 2.2 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 4.3 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 2.2 K 
+20 | output_layer                       | Linear                          | 33    
+----------------------------------------------------------------------------------------
+94.9 K    Trainable params
+0         Non-trainable params
+94.9 K    Total params
+0.380     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-13 20:25:36,181][0m Trial 3 finished with value: 2007.9381103515625 and parameters: {'learning_rate': 0.0003685145315042408, 'hidden_size': 32, 'attention_head_size': 4, 'dropout': 0.15342225489387104, 'batch_size': 32}. Best is trial 2 with value: 1810.215576171875.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 1.7 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 13.1 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 12.4 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 1.1 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 1.1 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 1.1 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 1.1 K 
+11 | lstm_encoder                       | LSTM                            | 2.2 K 
+12 | lstm_decoder                       | LSTM                            | 2.2 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 544   
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 32    
+15 | static_enrichment                  | GatedResidualNetwork            | 1.4 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 676   
+17 | post_attn_gate_norm                | GateAddNorm                     | 576   
+18 | pos_wise_ff                        | GatedResidualNetwork            | 1.1 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 576   
+20 | output_layer                       | Linear                          | 17    
+----------------------------------------------------------------------------------------
+40.6 K    Trainable params
+0         Non-trainable params
+40.6 K    Total params
+0.162     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-13 23:35:40,672][0m Trial 4 finished with value: 2091.6611328125 and parameters: {'learning_rate': 0.0004631340187825276, 'hidden_size': 16, 'attention_head_size': 4, 'dropout': 0.3344464125123229, 'batch_size': 16}. Best is trial 2 with value: 1810.215576171875.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 2.8 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 20.4 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 19.1 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 4.3 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 4.3 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 4.3 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 4.3 K 
+11 | lstm_encoder                       | LSTM                            | 8.4 K 
+12 | lstm_decoder                       | LSTM                            | 8.4 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 2.1 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 64    
+15 | static_enrichment                  | GatedResidualNetwork            | 5.3 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 4.2 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 2.2 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 4.3 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 2.2 K 
+20 | output_layer                       | Linear                          | 33    
+----------------------------------------------------------------------------------------
+96.5 K    Trainable params
+0         Non-trainable params
+96.5 K    Total params
+0.386     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-14 01:59:47,960][0m Trial 5 finished with value: 1829.4451904296875 and parameters: {'learning_rate': 0.0024668918623936345, 'hidden_size': 32, 'attention_head_size': 1, 'dropout': 0.3276445388420903, 'batch_size': 32}. Best is trial 2 with value: 1810.215576171875.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 2.8 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 20.4 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 19.1 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 4.3 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 4.3 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 4.3 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 4.3 K 
+11 | lstm_encoder                       | LSTM                            | 8.4 K 
+12 | lstm_decoder                       | LSTM                            | 8.4 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 2.1 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 64    
+15 | static_enrichment                  | GatedResidualNetwork            | 5.3 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 2.6 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 2.2 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 4.3 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 2.2 K 
+20 | output_layer                       | Linear                          | 33    
+----------------------------------------------------------------------------------------
+94.9 K    Trainable params
+0         Non-trainable params
+94.9 K    Total params
+0.380     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-14 05:06:45,938][0m Trial 6 finished with value: 2130.15673828125 and parameters: {'learning_rate': 0.00040115138931478406, 'hidden_size': 32, 'attention_head_size': 4, 'dropout': 0.20606560823518258, 'batch_size': 16}. Best is trial 2 with value: 1810.215576171875.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 1.7 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 13.1 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 12.4 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 1.1 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 1.1 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 1.1 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 1.1 K 
+11 | lstm_encoder                       | LSTM                            | 2.2 K 
+12 | lstm_decoder                       | LSTM                            | 2.2 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 544   
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 32    
+15 | static_enrichment                  | GatedResidualNetwork            | 1.4 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 1.1 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 576   
+18 | pos_wise_ff                        | GatedResidualNetwork            | 1.1 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 576   
+20 | output_layer                       | Linear                          | 17    
+----------------------------------------------------------------------------------------
+41.0 K    Trainable params
+0         Non-trainable params
+41.0 K    Total params
+0.164     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+[32m[I 2025-06-14 05:34:37,532][0m Trial 7 finished with value: inf and parameters: {'learning_rate': 0.0017375759595523858, 'hidden_size': 16, 'attention_head_size': 1, 'dropout': 0.1626456596767853, 'batch_size': 32}. Best is trial 2 with value: 1810.215576171875.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 1.7 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 13.1 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 12.4 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 1.1 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 1.1 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 1.1 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 1.1 K 
+11 | lstm_encoder                       | LSTM                            | 2.2 K 
+12 | lstm_decoder                       | LSTM                            | 2.2 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 544   
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 32    
+15 | static_enrichment                  | GatedResidualNetwork            | 1.4 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 1.1 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 576   
+18 | pos_wise_ff                        | GatedResidualNetwork            | 1.1 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 576   
+20 | output_layer                       | Linear                          | 17    
+----------------------------------------------------------------------------------------
+41.0 K    Trainable params
+0         Non-trainable params
+41.0 K    Total params
+0.164     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-14 08:36:23,442][0m Trial 8 finished with value: 2035.2393798828125 and parameters: {'learning_rate': 0.004309190942146989, 'hidden_size': 16, 'attention_head_size': 1, 'dropout': 0.2742481924131059, 'batch_size': 16}. Best is trial 2 with value: 1810.215576171875.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 1.7 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 13.1 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 12.4 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 1.1 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 1.1 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 1.1 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 1.1 K 
+11 | lstm_encoder                       | LSTM                            | 2.2 K 
+12 | lstm_decoder                       | LSTM                            | 2.2 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 544   
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 32    
+15 | static_enrichment                  | GatedResidualNetwork            | 1.4 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 1.1 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 576   
+18 | pos_wise_ff                        | GatedResidualNetwork            | 1.1 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 576   
+20 | output_layer                       | Linear                          | 17    
+----------------------------------------------------------------------------------------
+41.0 K    Trainable params
+0         Non-trainable params
+41.0 K    Total params
+0.164     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-14 11:39:33,997][0m Trial 9 finished with value: 1805.4365234375 and parameters: {'learning_rate': 0.0005266406889619675, 'hidden_size': 16, 'attention_head_size': 1, 'dropout': 0.17607714850160916, 'batch_size': 16}. Best is trial 9 with value: 1805.4365234375.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 1.7 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 13.1 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 12.4 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 1.1 K 
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 1.1 K 
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 1.1 K 
+10 | static_context_enrichment          | GatedResidualNetwork            | 1.1 K 
+11 | lstm_encoder                       | LSTM                            | 2.2 K 
+12 | lstm_decoder                       | LSTM                            | 2.2 K 
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 544   
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 32    
+15 | static_enrichment                  | GatedResidualNetwork            | 1.4 K 
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 1.1 K 
+17 | post_attn_gate_norm                | GateAddNorm                     | 576   
+18 | pos_wise_ff                        | GatedResidualNetwork            | 1.1 K 
+19 | pre_output_gate_norm               | GateAddNorm                     | 576   
+20 | output_layer                       | Linear                          | 17    
+----------------------------------------------------------------------------------------
+41.0 K    Trainable params
+0         Non-trainable params
+41.0 K    Total params
+0.164     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+[32m[I 2025-06-14 12:07:07,782][0m Trial 10 finished with value: inf and parameters: {'learning_rate': 0.0010626674456370418, 'hidden_size': 16, 'attention_head_size': 1, 'dropout': 0.39300366944819376, 'batch_size': 32}. Best is trial 9 with value: 1805.4365234375.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 5.0 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 34.3 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 32.2 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 16.8 K
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 16.8 K
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 16.8 K
+10 | static_context_enrichment          | GatedResidualNetwork            | 16.8 K
+11 | lstm_encoder                       | LSTM                            | 33.3 K
+12 | lstm_decoder                       | LSTM                            | 33.3 K
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 8.3 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 128   
+15 | static_enrichment                  | GatedResidualNetwork            | 20.9 K
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 16.6 K
+17 | post_attn_gate_norm                | GateAddNorm                     | 8.4 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 16.8 K
+19 | pre_output_gate_norm               | GateAddNorm                     | 8.4 K 
+20 | output_layer                       | Linear                          | 65    
+----------------------------------------------------------------------------------------
+284 K     Trainable params
+0         Non-trainable params
+284 K     Total params
+1.138     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+[32m[I 2025-06-14 12:45:34,136][0m Trial 11 finished with value: inf and parameters: {'learning_rate': 0.00011429492662671203, 'hidden_size': 64, 'attention_head_size': 1, 'dropout': 0.10265330427647976, 'batch_size': 16}. Best is trial 9 with value: 1805.4365234375.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 5.0 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 34.3 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 32.2 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 16.8 K
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 16.8 K
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 16.8 K
+10 | static_context_enrichment          | GatedResidualNetwork            | 16.8 K
+11 | lstm_encoder                       | LSTM                            | 33.3 K
+12 | lstm_decoder                       | LSTM                            | 33.3 K
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 8.3 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 128   
+15 | static_enrichment                  | GatedResidualNetwork            | 20.9 K
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 16.6 K
+17 | post_attn_gate_norm                | GateAddNorm                     | 8.4 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 16.8 K
+19 | pre_output_gate_norm               | GateAddNorm                     | 8.4 K 
+20 | output_layer                       | Linear                          | 65    
+----------------------------------------------------------------------------------------
+284 K     Trainable params
+0         Non-trainable params
+284 K     Total params
+1.138     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-14 15:55:54,105][0m Trial 12 finished with value: 2086.570068359375 and parameters: {'learning_rate': 0.00021449154618232222, 'hidden_size': 64, 'attention_head_size': 1, 'dropout': 0.19534602796520506, 'batch_size': 16}. Best is trial 9 with value: 1805.4365234375.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 5.0 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 34.3 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 32.2 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 16.8 K
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 16.8 K
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 16.8 K
+10 | static_context_enrichment          | GatedResidualNetwork            | 16.8 K
+11 | lstm_encoder                       | LSTM                            | 33.3 K
+12 | lstm_decoder                       | LSTM                            | 33.3 K
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 8.3 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 128   
+15 | static_enrichment                  | GatedResidualNetwork            | 20.9 K
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 16.6 K
+17 | post_attn_gate_norm                | GateAddNorm                     | 8.4 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 16.8 K
+19 | pre_output_gate_norm               | GateAddNorm                     | 8.4 K 
+20 | output_layer                       | Linear                          | 65    
+----------------------------------------------------------------------------------------
+284 K     Trainable params
+0         Non-trainable params
+284 K     Total params
+1.138     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+`Trainer.fit` stopped: `max_epochs=15` reached.
+[32m[I 2025-06-14 19:04:44,549][0m Trial 13 finished with value: 1610.2720947265625 and parameters: {'learning_rate': 0.000925426218427021, 'hidden_size': 64, 'attention_head_size': 1, 'dropout': 0.10171797299074353, 'batch_size': 16}. Best is trial 13 with value: 1610.2720947265625.[0m
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'loss' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['loss'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/utilities/parsing.py:269: UserWarning: Attribute 'logging_metrics' is an instance of `nn.Module` and is already saved during checkpointing. It is recommended to ignore them using `self.save_hyperparameters(ignore=['logging_metrics'])`.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/lightning_fabric/plugins/environments/slurm.py:165: PossibleUserWarning: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/tune_tft.py ...
+  rank_zero_warn(
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA A40') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
+
+   | Name                               | Type                            | Params
+----------------------------------------------------------------------------------------
+0  | loss                               | MAE                             | 0     
+1  | logging_metrics                    | ModuleList                      | 0     
+2  | input_embeddings                   | MultiEmbedding                  | 0     
+3  | prescalers                         | ModuleDict                      | 336   
+4  | static_variable_selection          | VariableSelectionNetwork        | 5.0 K 
+5  | encoder_variable_selection         | VariableSelectionNetwork        | 34.3 K
+6  | decoder_variable_selection         | VariableSelectionNetwork        | 32.2 K
+7  | static_context_variable_selection  | GatedResidualNetwork            | 16.8 K
+8  | static_context_initial_hidden_lstm | GatedResidualNetwork            | 16.8 K
+9  | static_context_initial_cell_lstm   | GatedResidualNetwork            | 16.8 K
+10 | static_context_enrichment          | GatedResidualNetwork            | 16.8 K
+11 | lstm_encoder                       | LSTM                            | 33.3 K
+12 | lstm_decoder                       | LSTM                            | 33.3 K
+13 | post_lstm_gate_encoder             | GatedLinearUnit                 | 8.3 K 
+14 | post_lstm_add_norm_encoder         | AddNorm                         | 128   
+15 | static_enrichment                  | GatedResidualNetwork            | 20.9 K
+16 | multihead_attn                     | InterpretableMultiHeadAttention | 10.4 K
+17 | post_attn_gate_norm                | GateAddNorm                     | 8.4 K 
+18 | pos_wise_ff                        | GatedResidualNetwork            | 16.8 K
+19 | pre_output_gate_norm               | GateAddNorm                     | 8.4 K 
+20 | output_layer                       | Linear                          | 65    
+----------------------------------------------------------------------------------------
+278 K     Trainable params
+0         Non-trainable params
+278 K     Total params
+1.113     Total estimated model params size (MB)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, val_dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/optuna/integration/pytorch_lightning.py:52: UserWarning: The metric 'val_loss' is not in the evaluation logs for pruning. Please make sure you set the correct metric name.
+  warnings.warn(message)
+/home/u563586/.conda/envs/tft_model_env/lib/python3.10/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:224: PossibleUserWarning: The dataloader, train_dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 64 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+slurmstepd-sepia: error: *** JOB 33559 ON sepia CANCELLED AT 2025-06-14T20:32:45 DUE TO TIME LIMIT ***

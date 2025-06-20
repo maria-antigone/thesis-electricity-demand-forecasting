@@ -1,9 +1,0 @@
-Medium horizon:
-
-LSTM Final Evaluation Metrics (Test Set, Original MW Scale):
-  MAE:  2954.9078 MW
-  RMSE: 4164.1983 MW
-  MAPE: 5.82%
-LSTM predictions (MW scale) saved to: /home/u563586/tft_project/outputs/lstm_runs/lstm_medium_exog_baseline_h672_w2016/lstm_predictions_mw.csv
-
-Long term didn't run!

@@ -1,3 +1,5 @@
+# utils tft
+
 import os
 from pytorch_forecasting.models import TemporalFusionTransformer
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
@@ -36,16 +38,16 @@ def get_callbacks(output_dir, config):
 
     return [early_stop_callback, checkpoint_callback]
 
-def get_trainer(config, output_dir, callbacks):
+def get_trainer(full_horizon_config, output_dir, callbacks):
     return Trainer(
-        max_epochs=config["epochs"],
+        max_epochs=full_horizon_config["epochs"],
         accelerator="gpu",
         devices=1,
         gradient_clip_val=0.1,
         callbacks=callbacks,
         default_root_dir=output_dir,
-        log_every_n_steps=10,
-        enable_progress_bar=False,
+        log_every_n_steps=100,
+        enable_progress_bar=True,
     )
 
 def load_config(horizon="short"):

@@ -1,5 +1,3 @@
-# main_lstm.py
-
 import os
 import time
 import numpy as np
@@ -8,40 +6,41 @@ import argparse
 from tensorflow.keras.callbacks import EarlyStopping, CSVLogger as KerasCSVLogger
 from utils_lstm import load_config as load_config_section, build_lstm_model
 from data_processing_lstm import prepare_lstm_data, encode_cyclical_features
-from metrics import mae as calculate_mae_metric, rmse as calculate_rmse_metric, mape as calculate_mape_metric # Renamed to avoid conflict
+from metrics import mae as calculate_mae_metric, rmse as calculate_rmse_metric, mape as calculate_mape_metric
 
 import tensorflow as tf
 
+# GPU Memory configuration
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
    try:
        for gpu in gpus:
            tf.config.experimental.set_memory_growth(gpu, True)
        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-       print(f"{len(gpus)} Physical GPUs,, {len(logical_gpus)} Logical GPUs configured for memory growth.", flush = True)
+       print(f"{len(gpus)} Physical GPUs, {len(logical_gpus)} Logical GPUs configured for memory growth.", flush=True)
    except RuntimeError as e:
        print(e)
 else:
-    print("No GPUs deteced by TensorFlow.", flush=True)
+    print("No GPUs detected by TensorFlow.", flush=True)
 
 # Argument parsing
-parser = argparse.ArgumentParser(description = "Run LSTM for a specific forecasting horizon.")
+parser = argparse.ArgumentParser(description="Run LSTM for a specific forecasting horizon.")
 parser.add_argument("--horizon", type=str, required=True, choices=["short", "medium", "long"],
-                    help = "The forecasting horizon to run (short/medium/long). Corresponds to config.yaml.")
+                    help="The forecasting horizon to run (short/medium/long). Corresponds to config.yaml.")
 args = parser.parse_args()
 
 # 1. Load config
 config_horizon_name = args.horizon
-config = load_config_section(config_horizon_name)
+full_horizon_config = load_config_section(config_horizon_name)
+config = full_horizon_config['lstm'] # model specific params!
 print(f"LSTM Config loaded: {config}", flush=True)
-forecast_horizon = config["output_horizon"]
+forecast_horizon = full_horizon_config["output_horizon"]
 
-# Output directory setup
 script_dir_main = os.path.dirname(os.path.abspath(__file__))
 project_base_dir_main = os.path.dirname(script_dir_main)
 
-run_tag = config.get('run_tag', config_horizon_name)
-run_name_lstm = f"lstm_{config.get('run_tag', 'short_v3.0_eval')}_h{forecast_horizon}_w{config['input_window']}"
+run_tag = config.get('run_tag', f"lstm_{config_horizon_name}")
+run_name_lstm = f"{run_tag}_h{forecast_horizon}_w{full_horizon_config['input_window']}"
 
 output_dir_run_lstm = os.path.join(project_base_dir_main, "outputs", "lstm_runs", run_name_lstm)
 os.makedirs(output_dir_run_lstm, exist_ok=True)
@@ -55,8 +54,7 @@ raw_df = pd.read_csv(data_path_main, sep=";", parse_dates=["utc_timestamp"], ind
 raw_df = encode_cyclical_features(raw_df)
 
 X_train, y_train, X_val, y_val, X_test, y_test, input_feature_scaler, target_scaler = \
-    prepare_lstm_data(raw_df, config=config)
-# y_train, y_val, y_test are SCALED
+    prepare_lstm_data(raw_df, config=full_horizon_config)
 
 print(f"LSTM target_scaler type for horizon {config_horizon_name}: {type(target_scaler)}", flush=True)
 
@@ -70,12 +68,12 @@ model.summary()
 
 # 4. Callbacks
 early_stop = EarlyStopping(monitor='val_loss', 
-                           patience=config["early_stopping_patience"], 
+                           patience=full_horizon_config["early_stopping_patience"], 
                            restore_best_weights=True,
                            verbose=1)
 
 csv_log_path = os.path.join(output_dir_run_lstm, "lstm_epoch_training_log.csv")
-keras_csv_logger = KerasCSVLogger(csv_log_path, append=False) # Overwrite if file exists for a new run
+keras_csv_logger = KerasCSVLogger(csv_log_path, append=False)
 print(f"Keras CSVLogger will save epoch logs to: {csv_log_path}", flush=True)
 
 print(f"Input shape for LSTM model: {input_shape_for_model}", flush=True)
@@ -87,8 +85,8 @@ start_training_time = time.time()
 history = model.fit(
     X_train, y_train,
     validation_data=(X_val, y_val),
-    epochs=config["epochs"],
-    batch_size=config["batch_size"],
+    epochs=full_horizon_config["epochs"], 
+    batch_size=config["batch_size"],      
     verbose=2,
     callbacks=[early_stop, keras_csv_logger]
 )
@@ -107,8 +105,8 @@ y_pred_scaled_lstm = model.predict(X_test)
 y_pred_mw = target_scaler.inverse_transform(y_pred_scaled_lstm)
 y_test_mw = target_scaler.inverse_transform(y_test)
 
-# Step 3: Dynamically select the final step for evaluation based on config
-final_step = config["output_horizon"]
+# Step 3: Dynamically select the final step for evaluation based on parent config
+final_step = full_horizon_config["output_horizon"]
 final_step_index = final_step - 1
 
 # Step 4: Calculate metrics using only the FINAL step of the forecast horizon
@@ -127,7 +125,6 @@ predictions_to_save = {
     'predicted_mw_step_1': y_pred_mw[:, 0].flatten()
 }
 
-# Only add the final step column if it's different from the first step
 if final_step > 1:
     predictions_to_save[f'actual_mw_step_{final_step}'] = y_test_mw[:, final_step_index].flatten()
     predictions_to_save[f'predicted_mw_step_{final_step}'] = y_pred_mw[:, final_step_index].flatten()

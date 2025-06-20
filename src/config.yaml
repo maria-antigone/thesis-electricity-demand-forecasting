@@ -1,135 +1,107 @@
 short:
+  # Common Parameters
   input_window: 672
   output_horizon: 96
   min_input_window: 96
   target_column: "actual_load"
   train_split: 0.8
   val_split: 0.1
-  num_workers: 2
+  num_workers: 4
+  epochs: 50
+  early_stopping_patience: 10
 
-  # LSTM (HPO)
-  run_tag: "baseline_final_lstm_short"
-  batch_size: 32
-  early_stopping_patience: 2
-  epochs: 7
-  # learning rate
+  # LSTM Final Tuned Parameters (from Short HPO)
+  lstm:
+    run_tag: "final_generalization_lstm_short"
+    learning_rate: 0.00088633582449202
+    lags: [1, 2, 96, 192, 288, 672]
+    feature_scaler: "MinMax"
+    target_scaler: "MinMax"
+    lstm_units: 48
+    dropout_rate: 0.1572721153508268
+    batch_size: 16
+    loss_function: "mae"
+    exogenous_features: ["hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos", "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature", "solar_capacity", "solar_generation", "wind_capacity", "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"]
 
-  # HPO parameters
-  epochs_hpo: 15
-  early_stopping_patience_hpo: 3
-  hpo_pruner_warmup: 2
-
-  # LSTM Parameters
-  learning_rate: 0.001
-  lags: [1, 2, 96, 192, 288, 672]
-  feature_scaler: "MinMax"
-  target_scaler: "MinMax"
-  lstm_units: 32
-  dropout_rate: 0.1
-  loss_function: "mae"
-  exogenous_features: [
-      "hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos",
-      "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature",
-      "solar_capacity", "solar_generation", "wind_capacity", "wind_generation",
-      "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"
-    ]
-
-  # TFT Parameters
-  run_tag_tft: "baseline_final_tft_short"
-  hidden_size: 16
-  attention_head_size: 1
-  dropout: 0.1
-  gradient_clip_val: 0.1
-  exogenous_features_tft: [
-      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag",
-      "temperature", "solar_capacity", "solar_generation", "wind_capacity",
-      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation",
-      "wind_onshore_capacity", "wind_onshore_generation"
-    ]
+  # TFT Final Tuned Parameters (from Short HPO)
+  tft:
+    run_tag: "final_generalization_tft_short"
+    learning_rate: 0.000925426218427021
+    hidden_size: 64
+    attention_head_size: 1
+    dropout: 0.10171797299074353
+    batch_size: 16
+    gradient_clip_val: 0.1
+    exogenous_features_tft: ["hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", "temperature", "solar_capacity", "solar_generation", "wind_capacity", "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"]
 
 medium:
+  # Common Parameters
   input_window: 1344
   output_horizon: 672
   min_input_window: 96
   target_column: "actual_load"
   train_split: 0.8
   val_split: 0.1
-  num_workers: 2
+  num_workers: 4
+  epochs: 50
+  early_stopping_patience: 5
 
-  # Short tuned parameters
-  run_tag: "baseline_final_lstm_medium"
-  early_stopping_patience: 2
-  epochs: 7
-  batch_size: 32
+  # LSTM Final Tuned Parameters (Using Short-term tuned params)
+  lstm:
+    run_tag: "final_generalization_lstm_medium"
+    learning_rate: 0.00088633582449202 
+    lags: [1, 96, 672, 1344]
+    feature_scaler: "MinMax"
+    target_scaler: "MinMax"
+    lstm_units: 48              
+    dropout_rate: 0.1572721153508268  
+    batch_size: 16                  
+    loss_function: "mae"
+    exogenous_features: ["hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos", "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature", "solar_capacity", "solar_generation", "wind_capacity", "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"]
 
-  # HPO Parameters
-  epochs_hpo: 15
-  early_stopping_patience_hpo: 3
-  hpo_pruner_warmup: 2
-
-  # LSTM parameters
-  learning_rate: 0.001
-  lags: [1, 96, 672, 1344]
-  feature_scaler: "MinMax"
-  target_scaler: "MinMax"
-  lstm_units: 32
-  dropout_rate: 0.1
-  loss_function: "mae"
-  exogenous_features: [
-      "hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos",
-      "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature",
-      "solar_capacity", "solar_generation", "wind_capacity", "wind_generation",
-      "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"
-    ]
-
-  # TFT parameters
-  run_tag_tft: "baseline_final_tft_medium"
-  hidden_size: 16
-  attention_head_size: 1
-  dropout: 0.1
-  gradient_clip_val: 0.1
-  exogenous_features_tft: [
-      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag",
-      "temperature", "solar_capacity", "solar_generation", "wind_capacity",
-      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation",
-      "wind_onshore_capacity", "wind_onshore_generation"
-    ]
+  # TFT Final Tuned Parameters (Using Short-term tuned params)
+  tft:
+    run_tag: "final_generalization_tft_medium"
+    learning_rate: 0.000925426218427021 
+    hidden_size: 64                   
+    attention_head_size: 1            
+    dropout: 0.10171797299074353       
+    batch_size: 16                     
+    gradient_clip_val: 0.1
+    exogenous_features_tft: ["hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", "temperature", "solar_capacity", "solar_generation", "wind_capacity", "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"]
 
 long:
-  input_window: 672
+  # Common Parameters
+  input_window: 672 # Using reduced window from successful baseline to prevent OOM
   output_horizon: 2880
   min_input_window: 96
   target_column: "actual_load"
   train_split: 0.8
   val_split: 0.1
-  num_workers: 2
-
-  run_tag: "baseline_final_lstm_long"
-  epochs: 7
+  num_workers: 0
+  epochs: 15
   early_stopping_patience: 2
-  batch_size: 4
 
-  lags: [1, 96, 672]
-  feature_scaler: "MinMax"
-  target_scaler: "MinMax"
-  lstm_units: 32
-  dropout_rate: 0.1
-  loss_function: "mae"
-  exogenous_features: [
-      "hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos",
-      "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature",
-      "solar_capacity", "solar_generation", "wind_capacity", "wind_generation",
-      "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"
-    ]
+  # LSTM Final Tuned Parameters (Using Short-term tuned params)
+  lstm:
+    run_tag: "final_generalization_lstm_long"
+    learning_rate: 0.00088633582449202
+    lags: [1, 96, 672]
+    feature_scaler: "MinMax"
+    target_scaler: "MinMax"
+    lstm_units: 48               
+    dropout_rate: 0.1572721153508268  
+    batch_size: 8                     # Reduced for stability
+    loss_function: "mae"
+    exogenous_features: ["hour_sin", "hour_cos", "weekday_sin", "weekday_cos", "month_sin", "month_cos", "is_daylight", "year", "weekend_flag", "holiday_flag", "temperature", "solar_capacity", "solar_generation", "wind_capacity", "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"]
 
-  run_tag_tft: "baseline_final_tft_long"
-  hidden_size: 16
-  attention_head_size: 1
-  dropout: 0.1
-  gradient_clip_val: 0.1
-  exogenous_features_tft: [
-      "hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag",
-      "temperature", "solar_capacity", "solar_generation", "wind_capacity",
-      "wind_generation", "wind_offshore_capacity", "wind_offshore_generation",
-      "wind_onshore_capacity", "wind_onshore_generation"
-    ]
+  # TFT Final Tuned Parameters (Using Short-term tuned params)
+  tft:
+    run_tag: "final_generalization_tft_long"
+    learning_rate: 0.000925426218427021
+    hidden_size: 64                   
+    attention_head_size: 1           
+    dropout: 0.10171797299074353    
+    batch_size: 4                       # Reduced for stability
+    gradient_clip_val: 0.1
+    exogenous_features_tft: ["hour", "is_daylight", "month", "year", "weekday", "weekend_flag", "holiday_flag", "temperature", "solar_capacity", "solar_generation", "wind_capacity", "wind_generation", "wind_offshore_capacity", "wind_offshore_generation", "wind_onshore_capacity", "wind_onshore_generation"]

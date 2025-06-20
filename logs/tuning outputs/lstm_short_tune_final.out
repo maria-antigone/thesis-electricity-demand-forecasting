@@ -1,9 +1,0 @@
---- Hyperparameter Optimization Finished ---
-Number of finished trials: 20
-Best trial for LSTM short:
-  Value (min val_mae_scaled): 0.027121
-  Best Parameters:
-    learning_rate: 0.00025007815677039
-    lstm_units: 192
-    dropout_rate: 0.10154506018308869
-    batch_size: 32

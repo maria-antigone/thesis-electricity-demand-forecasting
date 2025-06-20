@@ -39,8 +39,9 @@ def split_dataset(df: pd.DataFrame, config: dict):
     return train, val, test
 
 def create_tft_dataset(df: pd.DataFrame, config: dict, target_col: str):
-    time_varying_known_reals_from_config = config.get("exogenous_features_tft", [])
-
+    tft_config = config.get('tft', {})
+    time_varying_known_reals_from_config = tft_config.get("exogenous_features_tft", [])
+    
     time_varying_known_reals_present_in_df = [
         col for col in time_varying_known_reals_from_config if col in df.columns
     ]
@@ -51,10 +52,7 @@ def create_tft_dataset(df: pd.DataFrame, config: dict, target_col: str):
 
     print(f"TFT will be trained with the following {len(time_varying_known_reals_present_in_df)} time-varying known features: {time_varying_known_reals_present_in_df}", flush=True)
 
-    default_min_enc_calc = config['input_window'] // 7
-    min_enc_len_default = max(1, default_min_enc_calc if default_min_enc_calc > 0 else 24)
-    
-    min_enc_len = config.get('min_input_window', min_enc_len_default)
+    min_enc_len = config.get('min_input_window', config['input_window'])
     if min_enc_len > config['input_window']:
         min_enc_len = config['input_window']
     
@@ -69,26 +67,25 @@ def create_tft_dataset(df: pd.DataFrame, config: dict, target_col: str):
         min_encoder_length=min_enc_len, 
         max_prediction_length=config["output_horizon"],
         time_varying_known_reals=time_varying_known_reals_present_in_df,
-        time_varying_unknown_reals=[target_col], # The target is the only unknown future variable
+        time_varying_unknown_reals=[target_col],
         static_categoricals=[],
         static_reals=[],    
         add_relative_time_idx=True,
         add_target_scales=True, 
         add_encoder_length=True,
-        allow_missing_timesteps=config.get("allow_missing_timesteps_tft", True) 
+        allow_missing_timesteps=tft_config.get("allow_missing_timesteps_tft", True) 
     )
 
-def create_dataloaders(train_df, val_df, test_df, config, target_col):
+def create_dataloaders(train_df, val_df, test_df, config, target_col): 
     print(f"Inside create_dataloaders: train_df length: {len(train_df)}, val_df length: {len(val_df)}, test_df length: {len(test_df)}", flush=True)
     print(f"Config for DataLoaders: input_window (max_encoder_length): {config['input_window']}, output_horizon (max_prediction_length): {config['output_horizon']}", flush=True)
     
     min_rows_needed = config['input_window'] + config['output_horizon']
-    if len(train_df) < min_rows_needed :
+    if len(train_df) < min_rows_needed:
         print(f"CRITICAL WARNING: train_df (length {len(train_df)}) is shorter than min_rows_needed ({min_rows_needed}). No sequences can be created for training.", flush=True)
     if len(val_df) < min_rows_needed:
         print(f"CRITICAL WARNING: val_df (length {len(val_df)}) is shorter than min_rows_needed ({min_rows_needed}). No sequences can be created for validation.", flush=True)
     
-    # Create three separate, independent datasets
     training_dataset = create_tft_dataset(train_df, config, target_col)
     validation_dataset = create_tft_dataset(val_df, config, target_col)
     testing_dataset = create_tft_dataset(test_df, config, target_col) 
@@ -96,24 +93,26 @@ def create_dataloaders(train_df, val_df, test_df, config, target_col):
     num_workers_val = config.get("num_workers", 0) 
     print(f"DataLoaders will use num_workers: {num_workers_val}", flush=True)
     
-    # This logic for persistent_workers is from your old working file
     persistent_flag = True if num_workers_val > 0 else False
+
+    tft_config = config.get('tft', {})
+    batch_size = tft_config.get("batch_size", 32)
 
     train_loader = training_dataset.to_dataloader(
         train=True, 
-        batch_size=config["batch_size"], 
+        batch_size=batch_size, 
         num_workers=num_workers_val,       
         persistent_workers=persistent_flag 
     )
     val_loader = validation_dataset.to_dataloader(
         train=False, 
-        batch_size=config["batch_size"], 
+        batch_size=batch_size, 
         num_workers=num_workers_val,     
         persistent_workers=persistent_flag  
     )
     test_loader = testing_dataset.to_dataloader(
         train=False, 
-        batch_size=config["batch_size"], 
+        batch_size=batch_size, 
         num_workers=num_workers_val,         
         persistent_workers=persistent_flag 
     )
