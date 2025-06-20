@@ -176,3 +176,15 @@ cython_debug/
 # Data
 /data/raw/
 /data/processed/
+
+# Logs
+/logs/
+
+# Output visuals
+/notebooks/outputs/
+
+# Output files
+/outputs/
+
+# Reports
+/reports/
