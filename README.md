@@ -9,67 +9,71 @@
 
 ## Project Overview
 
-This project explores how deep learning can improve long-term electricity demand forecasting at the national grid level in Germany. The focus is on **comparing the Temporal Fusion Transformer (TFT)** with **Long Short-Term Memory (LSTM)** networks across three time horizons, with a particular emphasis on **30-day-ahead forecasting** — a timeframe underexplored in energy research.
+This thesis explores the use of deep learning to forecast electricity demand at high frequency (15-minute intervals) on a national scale. It compares the performance and interpretability of two models — **Temporal Fusion Transformer (TFT)** and **Long Short-Term Memory (LSTM)** — with a focus on **30-day-ahead forecasting**, a challenging but underexplored task in the energy domain.
 
-The study introduces **renewable energy availability (wind & solar)** as novel exogenous predictors and evaluates model interpretability using **SHAP values**, to better inform energy planning and policy.
+The study incorporates **renewable energy availability (wind and solar generation)** as exogenous inputs and uses TFT’s **Variable Selection Networks (VSNs)** to evaluate which features contribute most to model predictions at different time horizons.
 
-## Research Goals
+## Research Questions
 
-- **RQ1:** RQ 1: To what extent is the **Temporal Fusion Transformer (TFT)** model able to **outperform LSTM** for _30-day electricity demand forecasting_?
-- **SRQ 1.1:** How do **short-term** (day-ahead), **medium-term** (7 days ahead) and **long-term** (30 days ahead) time horizons compare in TFT’s ability to accurately forecast electricity demand?
-- **RQ2:** How do the **predictor features** contribute to most accurate long-term electricity demand forecasting, by **comparing SHAP values between TFT and LSTM?**
-- **SRQ 2.1:** To what extent do **different time horizons** change what features most accurately predict electricity demand?
+- **RQ1:** To what extent does the **TFT model outperform LSTM** for 30-day electricity demand forecasting?
+  - **SRQ1.1:** How does TFT’s forecasting accuracy vary across **1-day**, **7-day**, and **30-day** horizons?
+
+- **RQ2:** How do **input features** contribute to long-term forecasting accuracy, as revealed by TFT’s **Variable Selection Networks**?
+  - **SRQ2.1:** How does **feature importance change across forecasting horizons**?
 
 ## Dataset
 
-- **Source:** ENTSO-E Transparency Platform  
+- **Source:** Open Power System Data (via ENTSO-E Transparency Platform)
 - **Frequency:** 15-minute intervals  
-- **Timeframe:** 2015–2020  
-- **Rows:** ~200,000  
-- **Features:** Electricity load, time-aware calendar features, weather-based features, wind and solar generation
+- **Period:** 2015–2020  
+- **Rows:** ~175,000  
+- **Features:**  
+  - Electricity load  
+  - Temperature and calendar features  
+  - Wind and solar generation  
 
-## Methodology (_see full workflow under /reports_)
+## Methodology (_see workflow in `/reports`_)
 
 1. **Data Preparation**
-   - Merge raw sources, forward filling weather data
-   - Clean data, handle missing values
-   - Feature engineering (e.g., cyclic encodings, lag creation)
+   - Merge datasets and forward-fill weather data
+   - Drop low-quality columns and impute missing values
+   - Engineer time features (e.g., hour, weekend, daylight) with cyclical encoding
 
 2. **Exploratory Data Analysis**
-   - Demand trends and seasonality
-   - Correlation analysis by time horizon
-   - Distribution inspection
+   - Visualize seasonality and feature distributions
+   - Analyze non-linear relationships and correlation structures
 
-3. **Modeling**
-   - **LSTM**: Classical deep learning model for time-series
-   - **TFT**: State-of-the-art model for interpretable, multi-horizon forecasting
+3. **Preprocessing**
+   - Normalize numerical variables with MinMaxScaler
+   - Sequence and batch creation per model and horizon
+   - Adjusted input lengths based on GPU constraints
 
-4. **Preprocessing**
-   - Normalize numeric features
-   - Encode cyclical time features
-   - Subsample for fast prototyping
+4. **Modeling**
+   - **LSTM**: Standard sequence model, one model per horizon  
+   - **TFT**: Attention-based, interpretable multi-horizon model
 
 5. **Training**
-   - Use of GPU servers for high-power computing (HPC), via Linux
-   - Hyperparameter tuning (random search)
-   - Evaluation on short, medium, and long horizons
+   - Performed on Tilburg University GPU cluster
+   - Used **Optuna** for hyperparameter tuning (short horizon only)
+   - Horizon-specific models trained with early stopping
 
 6. **Evaluation**
-   - Metrics: **MAE** and **MAPE**
-   - Interpretability: **SHAP values** for feature importance comparison
+   - Metrics: **MAE**, **RMSE**, **MAPE**
+   - Interpretability: **TFT’s Variable Selection Networks (VSNs)**
 
-## Experimental Design
+## Experimental Setup
 
-- Forecasting horizons:
-  - **Short-term:** 1 day ahead
-  - **Medium-term:** 7 days ahead
-  - **Long-term:** 30 days ahead (main focus)
-- Models:
-  - TFT (multi-horizon)
-  - LSTM (retrained for each horizon separately)
-- Evaluation:
-  - Forecast accuracy (RQ1)
-  - Feature importance analysis via SHAP (RQ2)
+- **Horizons:**  
+  - Short-term: 1-day-ahead (96 steps)  
+  - Medium-term: 7-days-ahead (672 steps)  
+  - Long-term: 30-days-ahead (2880 steps)
+
+- **Model Setup:**  
+  - TFT (multi-horizon model trained per horizon)  
+  - LSTM (baseline trained per horizon)
+
+- **Interpretability:**  
+  - Cross-horizon comparison of feature relevance via VSNs
 
 ## Repository Structure
 
@@ -80,7 +84,7 @@ thesis-electricity-demand-forecasting/
 │   ├── raw/                  # Original datasets
 │   └── processed/            # Cleaned datasets
 │
-├── notebooks/                # Jupyter notebooks for EDA, cleaning, model prototyping, preprocessing
+├── notebooks/                # Jupyter notebooks for EDA, cleaning, model prototyping, preprocessing, visualizations
 │
 ├── reports/                  # Additional resources
 ├── src/                      # Python scripts
@@ -93,28 +97,30 @@ thesis-electricity-demand-forecasting/
 └── requirements.txt              
 ```
 
-## Clone the repository
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+## Setup Instructions
 
-## Set up a Python environment
+```bash
+# Clone the repository
+git clone https://github.com/your-username/thesis-electricity-demand-forecasting.git
+cd thesis-electricity-demand-forecasting
+
+# Set up a Python environment
 conda create -n demand_forecasting python=3.10
 conda activate demand_forecasting
 
-## Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-## Run the model training
+# Run the model training
 python -m src.main
-
 ## 🧠 Key Libraries
 
 - `pytorch-lightning`
 - `pytorch-forecasting`
+- `optuna`
 - `tensorflow` / `keras`
 - `scikit-learn`
 - `pandas`
 - `numpy`
 - `matplotlib`
 - `seaborn`
-- `shap`
