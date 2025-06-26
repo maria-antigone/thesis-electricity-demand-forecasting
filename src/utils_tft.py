@@ -46,7 +46,7 @@ def get_trainer(full_horizon_config, output_dir, callbacks):
         gradient_clip_val=0.1,
         callbacks=callbacks,
         default_root_dir=output_dir,
-        log_every_n_steps=100,
+        log_every_n_steps=100_000_000,
         enable_progress_bar=True,
     )
 

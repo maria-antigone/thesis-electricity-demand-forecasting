@@ -56,12 +56,12 @@ if __name__ == "__main__":
     
     train_df, val_df, test_df = split_dataset(df, full_horizon_config)
 
-    if config_horizon_name == 'long':
+    # if config_horizon_name == 'long':
         # Use only the most recent 60% of training data for the long run
-        subset_percentage = 0.60 
-        subset_start_index = int(len(train_df) * (1 - subset_percentage))
-        train_df = train_df.iloc[subset_start_index:]
-        print(f"--- LONG HORIZON: Using a {subset_percentage*100}% subset of training data to get a feasible runtime. New train shape: {train_df.shape} ---", flush=True)
+        # subset_percentage = 0.60 
+        # subset_start_index = int(len(train_df) * (1 - subset_percentage))
+        # train_df = train_df.iloc[subset_start_index:]
+        # print(f"--- LONG HORIZON: Using a {subset_percentage*100}% subset of training data to get a feasible runtime. New train shape: {train_df.shape} ---", flush=True)
 
     print("Creating Dataloaders...", flush=True)
     train_loader, val_loader, test_loader, training_dataset = create_dataloaders(

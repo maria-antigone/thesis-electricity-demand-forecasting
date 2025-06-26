@@ -78,7 +78,7 @@ long:
   target_column: "actual_load"
   train_split: 0.8
   val_split: 0.1
-  num_workers: 0
+  num_workers: 2
   epochs: 15
   early_stopping_patience: 2
 
